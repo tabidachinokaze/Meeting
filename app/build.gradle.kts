@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -40,6 +40,10 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_25
+        freeCompilerArgs.addAll(
+            "-Xexplicit-backing-fields",
+            "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
+        )
     }
 }
 
@@ -52,6 +56,17 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.material.icons.extended)
+    // koin
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.navigation3)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.androidx.startup)
+    // navigation3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(project(":compose-mvi"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

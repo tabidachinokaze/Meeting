@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Meeting</string>
+    <string name="auth_screen_email">Email</string>
+    <string name="auth_screen_password">Password</string>
+    <string name="auth_screen_forgot_password">Forgot password?</string>
+    <string name="auth_screen_login">Login</string>
+    <string name="auth_screen_subtitle_login">Welcome back! Please login to continue</string>
+    <string name="auth_screen_username">Username</string>
+    <string name="auth_screen_sign_up">Sign Up</string>
+    <string name="auth_screen_subtitle_sign_up">Create an account to get started</string>
 </resources>

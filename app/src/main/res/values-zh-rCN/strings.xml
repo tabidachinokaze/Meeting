@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Meeting</string>
+    <string name="auth_screen_email">邮箱</string>
+    <string name="auth_screen_password">密码</string>
+    <string name="auth_screen_forgot_password">忘记密码？</string>
+    <string name="auth_screen_login">登录</string>
+    <string name="auth_screen_subtitle_login">欢迎回来！请登录以继续</string>
+    <string name="auth_screen_username">用户名</string>
+    <string name="auth_screen_sign_up">注册</string>
+    <string name="auth_screen_subtitle_sign_up">创建账户即可开始使用</string>
+</resources>
