@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Meeting"
 include(":app")
+include(":compose-mvi")
