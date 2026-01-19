@@ -16,9 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://repo.clojars.org/")
     }
 }
 
 rootProject.name = "Meeting"
 include(":app")
 include(":compose-mvi")
+include(":backend")
+include(":shared")

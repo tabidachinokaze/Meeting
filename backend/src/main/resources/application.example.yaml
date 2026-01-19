@@ -1,0 +1,45 @@
+ktor:
+  development: true
+  application:
+    modules:
+      - moe.tabidachi.meeting.plugins.CORSKt.configureCORS
+      - moe.tabidachi.meeting.plugins.DIKt.configureDI
+      - moe.tabidachi.meeting.plugins.MonitoringKt.configureMonitoring
+      - moe.tabidachi.meeting.plugins.RoutingKt.configureRouting
+      - moe.tabidachi.meeting.plugins.SecurityKt.configureSecurity
+      - moe.tabidachi.meeting.plugins.SerializationKt.configureSerialization
+      - moe.tabidachi.meeting.plugins.SocketsKt.configureSockets
+      - moe.tabidachi.meeting.plugins.StatusPagesKt.configureStatusPages
+  deployment:
+    port: 8080
+
+jwt:
+  name: "jwt-auth"
+  domain: "https://example.com/"
+  audience: "example.com"
+  realm: "example"
+  secret: "114514"
+  issuer: "issuer"
+
+database:
+  main:
+    url: "jdbc:postgresql://host.docker.internal:5440/meeting"
+    user: username
+    driver: org.postgresql.Driver
+    password: password
+  test:
+    url: "jdbc:h2:file:./.idea/h2/meeting"
+    user: root
+    driver: org.h2.Driver
+    password: ""
+
+argon2:
+  iterations: 36
+  memory: 65536
+  parallelism: 1
+
+minio:
+  host: ""
+  port: 9000
+  access_key: ""
+  secret_key: ""
