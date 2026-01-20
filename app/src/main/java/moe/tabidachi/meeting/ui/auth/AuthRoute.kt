@@ -31,7 +31,11 @@ fun AuthRoute(
                 onUsernameChange = { event(AuthContract.Event.OnUsernameChange(it)) },
                 onPasswordChange = { event(AuthContract.Event.OnPasswordChange(it)) },
                 onEmailChange = { event(AuthContract.Event.OnEmailChange(it)) },
+                onAccountChange = {event(AuthContract.Event.OnAccountChange(it))},
                 onPasswordVisibleToggle = { event(AuthContract.Event.OnPasswordVisibleToggle) },
+                onLogin = { event(AuthContract.Event.OnLogin) },
+                onSignUp = { event(AuthContract.Event.OnSignUp) },
+                onForgotPassword = {},
             )
         }
     )
@@ -40,7 +44,10 @@ fun AuthRoute(
 @OptIn(KoinExperimentalAPI::class)
 fun Module.auth() {
     viewModel {
-        AuthViewModel(context = get())
+        AuthViewModel(
+            authApi = get(),
+            dataStore = get()
+        )
     }
     navigation<AuthRoute> {
         AuthRoute(viewModel = koinViewModel())

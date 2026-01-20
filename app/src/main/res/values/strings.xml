@@ -8,4 +8,5 @@
     <string name="auth_screen_username">Username</string>
     <string name="auth_screen_sign_up">Sign Up</string>
     <string name="auth_screen_subtitle_sign_up">Create an account to get started</string>
+    <string name="auth_screen_account">Email/Username</string>
 </resources>

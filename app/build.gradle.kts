@@ -34,6 +34,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -65,7 +66,15 @@ dependencies {
     // navigation3
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
+    // project
     implementation(project(":compose-mvi"))
+    implementation(project(":shared"))
+    // ktor
+    implementation(libs.bundles.ktor.client)
+    // other
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.datastore)
+    implementation(libs.jwtdecode)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,6 +1,11 @@
 package moe.tabidachi.meeting.service
 
-import moe.tabidachi.meeting.model.*
+import moe.tabidachi.meeting.model.LoginRequest
+import moe.tabidachi.meeting.model.Response
+import moe.tabidachi.meeting.model.SignupRequest
+import moe.tabidachi.meeting.model.StatusCode
+import moe.tabidachi.meeting.model.emptyData
+import moe.tabidachi.meeting.model.withData
 import moe.tabidachi.meeting.regex.RegexEmail
 import moe.tabidachi.meeting.regex.RegexUsernameStrict
 import moe.tabidachi.meeting.repository.UserRepository
@@ -9,11 +14,6 @@ import moe.tabidachi.meeting.security.Jwt
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaInstant
-
-interface AuthService {
-    suspend fun signup(request: SignupRequest): Response<String?>
-    suspend fun login(request: LoginRequest): Response<String?>
-}
 
 class AuthServiceImpl(
     private val jwt: Jwt,

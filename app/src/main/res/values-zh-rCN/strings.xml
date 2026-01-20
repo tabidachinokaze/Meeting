@@ -8,4 +8,5 @@
     <string name="auth_screen_username">用户名</string>
     <string name="auth_screen_sign_up">注册</string>
     <string name="auth_screen_subtitle_sign_up">创建账户即可开始使用</string>
+    <string name="auth_screen_account">邮箱/用户名</string>
 </resources>

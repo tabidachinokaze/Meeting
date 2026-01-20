@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import moe.tabidachi.meeting.jwt.Claims
 
 interface Jwt {
     val verifier: JWTVerifier
@@ -33,8 +34,4 @@ class JwtImpl(
             withAudience(*audience)
         }
         .sign(algorithm)
-}
-
-object Claims {
-    const val UID = "uid"
 }

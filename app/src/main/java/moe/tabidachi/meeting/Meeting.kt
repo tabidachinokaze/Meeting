@@ -1,6 +1,7 @@
 package moe.tabidachi.meeting
 
 import android.app.Application
+import moe.tabidachi.meeting.di.appModule
 import moe.tabidachi.meeting.di.routeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,6 +16,6 @@ class Meeting : Application(), KoinStartup {
     override fun onKoinStartup(): KoinConfiguration = koinConfiguration {
         androidLogger(level = Level.DEBUG)
         androidContext(this@Meeting)
-        modules(routeModule)
+        modules(routeModule, appModule)
     }
 }

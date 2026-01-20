@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
@@ -154,19 +155,20 @@ private fun ColumnScope.Login(
     state: AuthContract.State,
     actions: AuthContract.Actions
 ) {
-    Text(text = stringResource(R.string.auth_screen_email))
+    Text(text = stringResource(R.string.auth_screen_account))
     Spacer(modifier = Modifier.height(8.dp))
     OutlinedTextField(
-        value = state.email,
-        onValueChange = actions.onEmailChange,
+        value = state.account,
+        onValueChange = actions.onAccountChange,
         shape = RoundedCornerShape(12.dp),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Rounded.Email,
-                contentDescription = Icons.Rounded.Email.name
+                imageVector = Icons.Rounded.AccountCircle,
+                contentDescription = Icons.Rounded.AccountCircle.name
             )
         },
         singleLine = true,
+        isError = state.isAccountInvalid,
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -184,6 +186,7 @@ private fun ColumnScope.Login(
         },
         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         singleLine = true,
+        isError = state.isPasswordInvalid,
         trailingIcon = {
             IconButton(
                 onClick = actions.onPasswordVisibleToggle
@@ -264,6 +267,7 @@ private fun ColumnScope.SignUp(
             )
         },
         singleLine = true,
+        isError = state.isUsernameInvalid,
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -280,6 +284,7 @@ private fun ColumnScope.SignUp(
             )
         },
         singleLine = true,
+        isError = state.isEmailInvalid,
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -297,6 +302,7 @@ private fun ColumnScope.SignUp(
         },
         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         singleLine = true,
+        isError = state.isPasswordInvalid,
         trailingIcon = {
             IconButton(
                 onClick = actions.onPasswordVisibleToggle
