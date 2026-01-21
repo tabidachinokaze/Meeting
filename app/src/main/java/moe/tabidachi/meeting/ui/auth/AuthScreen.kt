@@ -1,5 +1,6 @@
 package moe.tabidachi.meeting.ui.auth
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -150,6 +151,12 @@ fun AuthScreen(
     }
 }
 
+fun errorMessage(@StringRes text: Int): @Composable () -> Unit {
+    return {
+        Text(text = stringResource(text), color = MaterialTheme.colorScheme.error)
+    }
+}
+
 @Composable
 private fun ColumnScope.Login(
     state: AuthContract.State,
@@ -168,7 +175,12 @@ private fun ColumnScope.Login(
             )
         },
         singleLine = true,
-        isError = state.isAccountInvalid,
+        isError = state.accountErrorMessage != null,
+        supportingText = when {
+            state.accountErrorMessage != null -> errorMessage(state.accountErrorMessage)
+
+            else -> null
+        },
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -186,7 +198,12 @@ private fun ColumnScope.Login(
         },
         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         singleLine = true,
-        isError = state.isPasswordInvalid,
+        isError = state.passwordErrorMessage != null,
+        supportingText = when {
+            state.passwordErrorMessage != null -> errorMessage(state.passwordErrorMessage)
+
+            else -> null
+        },
         trailingIcon = {
             IconButton(
                 onClick = actions.onPasswordVisibleToggle
@@ -267,7 +284,12 @@ private fun ColumnScope.SignUp(
             )
         },
         singleLine = true,
-        isError = state.isUsernameInvalid,
+        isError = state.usernameErrorMessage != null,
+        supportingText = when {
+            state.usernameErrorMessage != null -> errorMessage(state.usernameErrorMessage)
+
+            else -> null
+        },
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -284,7 +306,12 @@ private fun ColumnScope.SignUp(
             )
         },
         singleLine = true,
-        isError = state.isEmailInvalid,
+        isError = state.emailErrorMessage != null,
+        supportingText = when {
+            state.emailErrorMessage != null -> errorMessage(state.emailErrorMessage)
+
+            else -> null
+        },
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -302,7 +329,12 @@ private fun ColumnScope.SignUp(
         },
         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         singleLine = true,
-        isError = state.isPasswordInvalid,
+        isError = state.passwordErrorMessage != null,
+        supportingText = when {
+            state.passwordErrorMessage != null -> errorMessage(state.passwordErrorMessage)
+
+            else -> null
+        },
         trailingIcon = {
             IconButton(
                 onClick = actions.onPasswordVisibleToggle

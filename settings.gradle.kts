@@ -21,7 +21,15 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Meeting"
-include(":app")
-include(":compose-mvi")
-include(":backend")
+
+when (System.getProperty("idea.vendor.name")) {
+    "Google" -> {
+        include(":app")
+        include(":compose-mvi")
+    }
+
+    "JetBrains" -> {
+        include(":backend")
+    }
+}
 include(":shared")

@@ -9,4 +9,17 @@
     <string name="auth_screen_sign_up">Sign Up</string>
     <string name="auth_screen_subtitle_sign_up">Create an account to get started</string>
     <string name="auth_screen_account">Email/Username</string>
+    <string name="auth_screen_error_account_empty">Account cannot be empty</string>
+    <string name="auth_screen_error_password_length">Password must be at least 8 characters</string>
+    <string name="auth_screen_error_email_registered">Email already registered</string>
+    <string name="auth_screen_error_username_taken">Username already taken</string>
+    <string name="auth_screen_error_password_mismatch">Passwords do not match</string>
+    <string name="auth_screen_error_invalid_email">Invalid email format</string>
+    <string name="auth_screen_error_invalid_username">Invalid username format</string>
+    <string name="auth_screen_error_user_not_registered">User not registered</string>
+    <string name="auth_screen_error_server_internal">Server temporarily unavailable. Please try again later.</string>
+    <string name="auth_screen_success_login">Login successful</string>
+    <string name="auth_screen_success_register">Registration successful</string>
+    <string name="error_network_address">Unable to connect to server. Please check your network settings.</string>
+    <string name="error_connect_timeout">Connection to server timed out. Please check your network and try again.</string>
 </resources>
