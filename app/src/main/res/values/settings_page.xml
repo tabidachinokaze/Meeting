@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings Page -->
+    <string name="settings_page_logout">Logout</string>
+    <string name="settings_page_profile_header_meetings_this_month">Meetings this month</string>
+    <string name="settings_page_profile_header_todo_items">Todo items</string>
+    <string name="settings_page_profile_header_meeting_hours">Meeting hours</string>
+
+    <!-- Settings Categories -->
+    <string name="settings_page_category_account">Account Settings</string>
+    <string name="settings_page_category_meeting">Meeting Preferences</string>
+    <string name="settings_page_category_notification">Notifications</string>
+    <string name="settings_page_category_application">App Settings</string>
+    <string name="settings_page_category_help">Help &amp; Support</string>
+
+    <!-- Account Items -->
+    <string name="settings_page_account_edit_profile">Edit Profile</string>
+    <string name="settings_page_account_edit_profile_subtitle">Edit username, avatar, etc.</string>
+    <string name="settings_page_account_email">Email Management</string>
+    <string name="settings_page_account_privacy_security">Privacy &amp; Security</string>
+    <string name="settings_page_account_privacy_security_subtitle">Password, permissions settings</string>
+
+    <!-- Meeting Items -->
+    <string name="settings_page_meeting_video">Default Video Settings</string>
+    <string name="settings_page_meeting_video_subtitle">Camera, audio settings</string>
+    <string name="settings_page_meeting_transcript">AI Transcription Language</string>
+    <string name="settings_page_meeting_transcript_subtitle">Chinese (Simplified)</string>
+    <string name="settings_page_meeting_calendar">Calendar Integration</string>
+    <string name="settings_page_meeting_calendar_subtitle">Sync external calendars</string>
+
+    <!-- Notification Items -->
+    <string name="settings_page_notification_push_notifications">Push Notifications</string>
+    <string name="settings_page_notification_push_notifications_subtitle">Meeting reminders and updates</string>
+
+    <!-- Application Items -->
+    <string name="settings_page_application_dark_mode">Dark Mode</string>
+    <string name="settings_page_application_dark_mode_subtitle">Toggle app theme</string>
+    <string name="settings_page_application_auto_record">Auto Record</string>
+    <string name="settings_page_application_auto_record_subtitle">Auto start recording meetings</string>
+    <string name="settings_page_application_language">Language</string>
+
+    <!-- Help Items -->
+    <string name="settings_page_help_help_center">Help Center</string>
+    <string name="settings_page_help_help_center_subtitle">User guide and FAQ</string>
+
+</resources>

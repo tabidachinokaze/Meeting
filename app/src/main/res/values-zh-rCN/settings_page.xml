@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 设置页面 -->
+    <string name="settings_page_logout">退出登录</string>
+    <string name="settings_page_profile_header_meetings_this_month">本月会议</string>
+    <string name="settings_page_profile_header_todo_items">代办事项</string>
+    <string name="settings_page_profile_header_meeting_hours">会议时长</string>
+
+    <!-- 设置分类 -->
+    <string name="settings_page_category_account">账户设置</string>
+    <string name="settings_page_category_meeting">会议偏好</string>
+    <string name="settings_page_category_notification">通知</string>
+    <string name="settings_page_category_application">应用设置</string>
+    <string name="settings_page_category_help">帮助与支持</string>
+
+    <!-- 账户项目 -->
+    <string name="settings_page_account_edit_profile">修改个人资料</string>
+    <string name="settings_page_account_edit_profile_subtitle">修改用户名，头像等信息</string>
+    <string name="settings_page_account_email">邮箱管理</string>
+    <string name="settings_page_account_privacy_security">隐私与安全</string>
+    <string name="settings_page_account_privacy_security_subtitle">密码、权限设置</string>
+
+    <!-- 会议项目 -->
+    <string name="settings_page_meeting_video">默认视频设置</string>
+    <string name="settings_page_meeting_video_subtitle">摄像头、音频设置</string>
+    <string name="settings_page_meeting_transcript">AI转录语言</string>
+    <string name="settings_page_meeting_transcript_subtitle">中文（简体）</string>
+    <string name="settings_page_meeting_calendar">日历集成</string>
+    <string name="settings_page_meeting_calendar_subtitle">同步外部日历</string>
+
+    <!-- 通知项目 -->
+    <string name="settings_page_notification_push_notifications">推送通知</string>
+    <string name="settings_page_notification_push_notifications_subtitle">会议提醒和更新</string>
+
+    <!-- 应用项目 -->
+    <string name="settings_page_application_dark_mode">深色模式</string>
+    <string name="settings_page_application_dark_mode_subtitle">切换应用主题</string>
+    <string name="settings_page_application_auto_record">自动录制</string>
+    <string name="settings_page_application_auto_record_subtitle">会议自动开始录制</string>
+    <string name="settings_page_application_language">语言</string>
+
+    <!-- 帮助项目 -->
+    <string name="settings_page_help_help_center">帮助中心</string>
+    <string name="settings_page_help_help_center_subtitle">使用指南和常见问题</string>
+
+</resources>

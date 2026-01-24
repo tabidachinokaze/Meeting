@@ -6,8 +6,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import moe.tabidachi.meeting.BuildConfig
 import moe.tabidachi.meeting.data.model.Settings
 
@@ -18,7 +20,7 @@ class SettingsDataStore(
     val settings: StateFlow<Settings> = dataStore.data.stateIn(
         scope = scope,
         started = SharingStarted.Eagerly,
-        initialValue = Settings.Empty
+        initialValue = runBlocking { dataStore.data.first() }
     )
 
     init {

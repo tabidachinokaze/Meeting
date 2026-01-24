@@ -22,4 +22,9 @@
     <string name="auth_screen_success_register">Registration successful</string>
     <string name="error_network_address">Unable to connect to server. Please check your network settings.</string>
     <string name="error_connect_timeout">Connection to server timed out. Please check your network and try again.</string>
+
+    <string name="main_screen_tab_home">Home</string>
+    <string name="main_screen_tab_meetings">Meetings</string>
+    <string name="main_screen_tab_tasks">Tasks</string>
+    <string name="main_screen_tab_settings">Profile</string>
 </resources>

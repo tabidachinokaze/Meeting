@@ -71,6 +71,9 @@ dependencies {
     implementation(project(":shared"))
     // ktor
     implementation(libs.bundles.ktor.client)
+    // coil
+    implementation(platform(libs.coil.bom))
+    implementation(libs.bundles.coil)
     // other
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.datastore)
