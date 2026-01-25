@@ -5,8 +5,8 @@ import kotlinx.coroutines.withContext
 import moe.tabidachi.meeting.database.entity.UserEntity
 import moe.tabidachi.meeting.database.model.User
 import moe.tabidachi.meeting.database.table.UserTable
-import moe.tabidachi.meeting.mapper.DomainMapper
-import moe.tabidachi.meeting.mapper.UserDomainMapper
+import moe.tabidachi.meeting.mapper.UserMapper
+import moe.tabidachi.meeting.model.UserInfo
 import moe.tabidachi.meeting.security.Encryptor
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
@@ -17,11 +17,11 @@ interface UserRepository {
     suspend fun getByEmail(email: String): User?
     suspend fun getByUsername(username: String): User?
     suspend fun create(username: String, email: String, password: String): Long
+    suspend fun getUserInfo(uid: Long): UserInfo?
 }
 
 class UserRepositoryImpl(
     private val database: Database,
-    private val userDomainMapper: DomainMapper<UserEntity, User> = UserDomainMapper,
     private val encryptor: Encryptor
 ) : UserRepository {
     private suspend fun <T> withTransaction(block: suspend () -> T): T =
@@ -36,13 +36,13 @@ class UserRepositoryImpl(
     override suspend fun getByEmail(email: String): User? = withTransaction {
         UserEntity.find { UserTable.email.eq(email) }
             .singleOrNull()
-            ?.let(userDomainMapper::toDomain)
+            ?.let(UserMapper::toUser)
     }
 
     override suspend fun getByUsername(username: String): User? = withTransaction {
         UserEntity.find { UserTable.username.eq(username) }
             .singleOrNull()
-            ?.let(userDomainMapper::toDomain)
+            ?.let(UserMapper::toUser)
     }
 
     override suspend fun create(username: String, email: String, password: String): Long =
@@ -56,4 +56,10 @@ class UserRepositoryImpl(
             }
             entity.id.value
         }
+
+    override suspend fun getUserInfo(uid: Long): UserInfo? = withTransaction {
+        UserEntity.find { UserTable.id.eq(uid) }
+            .singleOrNull()
+            ?.let(UserMapper::toUserInfo)
+    }
 }

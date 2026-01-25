@@ -1,7 +1,5 @@
 package moe.tabidachi.meeting.ui.auth
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -12,6 +10,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
+import org.koin.androidx.scope.dsl.activityScope
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.module.Module
@@ -62,7 +61,8 @@ fun Module.auth() {
         AuthViewModel(
             context = get(),
             authApi = get(),
-            dataStore = get()
+            dataStore = get(),
+            backStack = get()
         )
     }
     navigation<AuthRoute> {

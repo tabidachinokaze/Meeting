@@ -11,12 +11,14 @@ enum class StatusCode(
     UserNotRegistered(0, 1, 2, "用户未注册"),
     SignUpSuccess(0, 1, 3, "注册成功"),
     SignUpFailure(0, 1, 4, "注册失败"),
+    Success(0, 1, 5, "成功"),
 
     // 用户相关
     EmailAlreadyExists(4, 0, 0, "邮箱已注册"),
     UsernameAlreadyExists(4, 0, 1, "用户名已被占用"),
     PasswordTooWeak(4, 0, 2, "密码长度必须至少为8个字符"),
     PasswordMismatch(4, 0, 3, "密码不匹配"),
+    UserNotFound(4, 0, 4, "用户不存在"),
 
     // 验证错误
     InvalidEmail(4, 1, 0, "Invalid email format"),
@@ -40,3 +42,5 @@ inline fun <reified T> StatusCode.withData(data: T): Response<T> =
 
 fun StatusCode.emptyData(): Response<String?> =
     Response(code = code, message = message, data = null)
+
+val Response<*>.statusCode: StatusCode? get() = StatusCode.valueOf(code)

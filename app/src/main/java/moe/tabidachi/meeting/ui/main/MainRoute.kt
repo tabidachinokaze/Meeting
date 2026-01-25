@@ -2,6 +2,7 @@ package moe.tabidachi.meeting.ui.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
@@ -15,6 +16,7 @@ data object MainRoute : NavKey
 
 @Composable
 fun MainRoute(
+    backStack: NavBackStack<NavKey>,
     viewModel: MainViewModel
 ) {
     val (state, event) = viewModel.observe { }
@@ -22,7 +24,8 @@ fun MainRoute(
         state = state.value,
         actions = remember {
             MainContract.Actions(
-                onTabClick = { event(MainContract.Event.OnTabClick(it)) }
+                onTabClick = { event(MainContract.Event.OnTabClick(it)) },
+                onLogout = { event(MainContract.Event.OnLogout) }
             )
         }
     )
@@ -31,11 +34,15 @@ fun MainRoute(
 @OptIn(KoinExperimentalAPI::class)
 fun Module.main() {
     viewModel {
-        MainViewModel()
+        MainViewModel(
+            userApi = get(),
+            dataStore = get()
+        )
     }
     navigation<MainRoute> {
         MainRoute(
-            viewModel = get()
+            backStack = get(),
+            viewModel = get(),
         )
     }
 }

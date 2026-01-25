@@ -2,11 +2,13 @@ package moe.tabidachi.meeting.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.AuthApi
+import moe.tabidachi.meeting.data.api.UserApi
 import moe.tabidachi.meeting.data.model.Settings
 import moe.tabidachi.meeting.ktx.dataStore
 import moe.tabidachi.meeting.shared.SharedHttpClient
@@ -18,6 +20,16 @@ import moe.tabidachi.meeting.ui.main.main
 import org.koin.dsl.module
 
 val routeModule = module {
+    single<NavBackStack<NavKey>> {
+        val settingsDataStore: SettingsDataStore = get()
+        val startDestination: NavKey = when (settingsDataStore.token) {
+            null -> AuthRoute
+            else -> MainRoute
+        }
+        val backStack = NavBackStack(startDestination)
+        settingsDataStore.setBackStack(backStack)
+        backStack
+    }
     auth()
     main()
 }
@@ -47,11 +59,11 @@ val appModule = module {
             baseUrl = { dataStore.settings.value.baseUrl }
         )
     }
-    single<NavKey> {
+    single<UserApi> {
         val dataStore: SettingsDataStore = get()
-        when (dataStore.token) {
-            null -> AuthRoute
-            else -> MainRoute
-        }
+        UserApi(
+            client = get(),
+            baseUrl = { dataStore.settings.value.baseUrl }
+        )
     }
 }

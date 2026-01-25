@@ -87,9 +87,7 @@ fun SettingsPage(
         actions = actions
     )
     ElevatedButton(
-        onClick = {
-
-        },
+        onClick = actions.onLogout,
         shape = RoundedCornerShape(16.dp),
         elevation = ButtonDefaults.buttonElevation(),
         modifier = Modifier
@@ -164,7 +162,7 @@ private fun ProfileHeader(
             .padding(16.dp)
     ) {
         SubcomposeAsyncImage(
-            model = "",
+            model = state.userInfo?.avatar,
             contentDescription = "profile image",
             modifier = Modifier
                 .clip(CircleShape)
@@ -172,18 +170,21 @@ private fun ProfileHeader(
         ) {
             when (painter.state.collectAsState().value) {
                 is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
-                else -> MonogramAvatar(name = state.username, modifier = Modifier.fillMaxSize())
+                else -> MonogramAvatar(
+                    name = state.userInfo?.username.orEmpty(),
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
         ListItem(
             headlineContent = {
                 Text(
-                    text = state.username,
+                    text = state.userInfo?.username.orEmpty(),
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
             },
             supportingContent = {
-                Text(text = state.email)
+                Text(text = state.userInfo?.email.orEmpty())
             }
         )
     }
@@ -268,7 +269,7 @@ fun SettingsItems(
             }, modifier = Modifier.padding(horizontal = 16.dp)
         ) { item ->
             val subtitle = when (item) {
-                AccountItem.Email -> state.email
+                AccountItem.Email -> state.userInfo?.email
                 ApplicationItem.Language -> getLocale().displayName
                 else -> item.subtitle?.let { stringResource(it) }
             }

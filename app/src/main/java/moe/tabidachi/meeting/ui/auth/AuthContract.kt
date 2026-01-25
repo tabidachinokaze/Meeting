@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.auth0.android.jwt.JWT
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,8 +22,10 @@ import moe.tabidachi.meeting.ktx.TAG
 import moe.tabidachi.meeting.model.LoginRequest
 import moe.tabidachi.meeting.model.SignupRequest
 import moe.tabidachi.meeting.model.StatusCode
+import moe.tabidachi.meeting.model.statusCode
 import moe.tabidachi.meeting.regex.RegexEmail
 import moe.tabidachi.meeting.regex.RegexUsernameStrict
+import moe.tabidachi.meeting.ui.main.MainRoute
 import moe.tabidachi.meeting.utils.Debounce
 import java.nio.channels.UnresolvedAddressException
 
@@ -81,7 +85,8 @@ enum class AuthType(
 class AuthViewModel(
     private val context: Context,
     private val authApi: AuthApi,
-    private val dataStore: SettingsDataStore
+    private val dataStore: SettingsDataStore,
+    private val backStack: NavBackStack<NavKey>
 ) : AuthContract.ViewModel() {
     final override val state: StateFlow<AuthContract.State>
         field = MutableStateFlow(AuthContract.State())
@@ -140,8 +145,7 @@ class AuthViewModel(
                             password = state.value.password
                         )
                     )
-                    Log.d(TAG, "onLogin: ${StatusCode.valueOf(response.code)}")
-                    when (StatusCode.valueOf(response.code)) {
+                    when (response.statusCode) {
                         StatusCode.UserNotRegistered -> state.update {
                             it.copy(accountErrorMessage = R.string.auth_screen_error_user_not_registered)
                         }
@@ -157,6 +161,7 @@ class AuthViewModel(
                         StatusCode.LoginSuccess -> {
                             effect.emit(AuthContract.Effect.Toast(context.getString(R.string.auth_screen_success_login)))
                             response.data?.let { updateToken(it) }
+                            onAuthSuccess()
                         }
 
                         else -> Unit
@@ -200,7 +205,7 @@ class AuthViewModel(
                             password = state.value.password
                         )
                     )
-                    when (StatusCode.valueOf(response.code)) {
+                    when (response.statusCode) {
                         StatusCode.EmailAlreadyExists -> state.update {
                             it.copy(emailErrorMessage = R.string.auth_screen_error_email_registered)
                         }
@@ -228,6 +233,7 @@ class AuthViewModel(
                         StatusCode.SignUpSuccess -> {
                             effect.emit(AuthContract.Effect.Toast(context.getString(R.string.auth_screen_success_register)))
                             response.data?.let { updateToken(it) }
+                            onAuthSuccess()
                         }
 
                         else -> Unit
@@ -253,5 +259,10 @@ class AuthViewModel(
         val uid = jwt.getClaim(Claims.UID).asLong() ?: error("未解析出uid")
         dataStore.setToken(uid, token)
         dataStore.switchUser(uid)
+    }
+
+    private fun onAuthSuccess() {
+        backStack.clear()
+        backStack.add(MainRoute)
     }
 }

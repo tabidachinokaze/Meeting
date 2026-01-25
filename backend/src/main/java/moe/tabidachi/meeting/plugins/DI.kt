@@ -7,8 +7,8 @@ import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
 import aws.smithy.kotlin.runtime.net.url.Url
-import io.ktor.server.application.Application
-import io.ktor.server.config.property
+import io.ktor.server.application.*
+import io.ktor.server.config.*
 import io.ktor.server.plugins.di.dependencies
 import moe.tabidachi.meeting.config.Argon2Config
 import moe.tabidachi.meeting.config.DatabaseConfig
@@ -23,6 +23,8 @@ import moe.tabidachi.meeting.security.Jwt
 import moe.tabidachi.meeting.security.JwtImpl
 import moe.tabidachi.meeting.service.AuthService
 import moe.tabidachi.meeting.service.AuthServiceImpl
+import moe.tabidachi.meeting.service.UserService
+import moe.tabidachi.meeting.service.UserServiceImpl
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -89,6 +91,11 @@ fun Application.configureDI() {
             AuthServiceImpl(
                 jwt = resolve(),
                 encryptor = resolve(),
+                userRepository = resolve()
+            )
+        }
+        provide<UserService> {
+            UserServiceImpl(
                 userRepository = resolve()
             )
         }
