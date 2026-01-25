@@ -7,21 +7,9 @@ import kotlin.time.Instant
 data class UserInfo(
     val uid: Long,
     val username: String,
-    val email: String?,
-    val phone: String?,
-    val avatar: String?,
-    val createTime: Instant?,
-    val updateTime: Instant?,
-) {
-    companion object {
-        val Empty = UserInfo(
-            uid = 0,
-            username = "",
-            email = "",
-            phone = null,
-            avatar = null,
-            createTime = null,
-            updateTime = null
-        )
-    }
-}
+    val email: String? = null,
+    val phone: String? = null,
+    val avatar: String? = null,
+    val createTime: Instant? = null,
+    val updateTime: Instant? = null,
+)

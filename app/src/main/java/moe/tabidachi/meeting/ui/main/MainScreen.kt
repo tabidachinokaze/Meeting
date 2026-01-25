@@ -61,7 +61,10 @@ fun MainScreen(
                 .padding(PaddingValues(bottom = it.calculateBottomPadding()))
         ) {
             when (state.currentTab) {
-                MainTab.Home -> HomePage()
+                MainTab.Home -> HomePage(
+                    state = state,
+                    actions = actions
+                )
                 MainTab.Meetings -> MeetingsPage()
                 MainTab.Tasks -> TasksPage()
                 MainTab.Settings -> SettingsPage(

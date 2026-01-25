@@ -40,7 +40,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -53,13 +52,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.ui.common.MonogramAvatar
+import moe.tabidachi.meeting.ui.common.ProvideContentColorTextStyle
 import moe.tabidachi.meeting.ui.common.getLocale
 import moe.tabidachi.meeting.ui.main.MainContract
 import moe.tabidachi.meeting.ui.preview.PreviewTheme
@@ -116,20 +115,6 @@ private fun ProfileHeader(
 ) = Column(
     modifier = modifier
 ) {
-    @Composable
-    fun ProvideContentColorTextStyle(
-        contentColor: Color,
-        textStyle: TextStyle,
-        content: @Composable () -> Unit,
-    ) {
-        val mergedStyle = LocalTextStyle.current.merge(textStyle)
-        CompositionLocalProvider(
-            LocalContentColor provides contentColor,
-            LocalTextStyle provides mergedStyle,
-            content = content,
-        )
-    }
-
     @Composable
     fun ListItem(
         headlineContent: @Composable () -> Unit,

@@ -11,30 +11,82 @@ import kotlinx.coroutines.launch
 import moe.tabidachi.compose.mvi.BackingFieldsViewModel
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.UserApi
+import moe.tabidachi.meeting.data.model.Meeting
+import moe.tabidachi.meeting.domain.model.MeetingItem
 import moe.tabidachi.meeting.ktx.TAG
 import moe.tabidachi.meeting.model.StatusCode
 import moe.tabidachi.meeting.model.UserInfo
 import moe.tabidachi.meeting.model.statusCode
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
 
 interface MainContract {
     abstract class ViewModel : BackingFieldsViewModel<State, Event, Effect>()
 
     data class State(
         val currentTab: MainTab = MainTab.Home,
+        // settings page
         val isNotificationEnabled: Boolean = false,
         val isDarkModeEnabled: Boolean = false,
         val isAutoRecordEnabled: Boolean = false,
         val monthMeetingCount: Int = 0,
         val todolistCount: Int = 0,
         val meetingHours: Double = 0.0,
-        val userInfo: UserInfo? = null
+        val userInfo: UserInfo? = null,
+        // home page
+        val greeting: String = "",
+        val tips: String? = null,
+        val meetings: List<MeetingItem> = emptyList()
     ) {
         companion object {
             val Preview = State(
                 currentTab = MainTab.Settings,
-                userInfo = UserInfo.Empty.copy(
+                userInfo = UserInfo(
+                    uid = 1,
                     username = "kaze",
                     email = "kaze@tabidachi.moe",
+                ),
+                greeting = "Good Morning, kaze",
+                tips = "You have 3 high-priority tasks due today. Would you like to reschedule your 2:30 PM meeting?",
+                meetings = listOf(
+                    MeetingItem(
+                        id = 1,
+                        name = "Product Strategy Review",
+                        time = Clock.System.now(),
+                        duration = 45.minutes,
+                        participants = listOf(
+                            UserInfo(
+                                uid = 1,
+                                username = "Sarah K."
+                            ),
+                            UserInfo(
+                                uid = 2,
+                                username = "Mike T."
+                            ),
+                            UserInfo(
+                                uid = 3,
+                                username = "Alex P."
+                            )
+                        ),
+                        status = Meeting.Status.Upcoming
+                    ),
+                    MeetingItem(
+                        id = 1,
+                        name = "Design Sprint Planning",
+                        time = Clock.System.now(),
+                        duration = 60.minutes,
+                        participants = listOf(
+                            UserInfo(
+                                uid = 4,
+                                username = "Emily R."
+                            ),
+                            UserInfo(
+                                uid = 5,
+                                username = "John D."
+                            )
+                        ),
+                        status = Meeting.Status.Upcoming
+                    )
                 )
             )
         }
@@ -70,9 +122,7 @@ class MainViewModel(
 ) : MainContract.ViewModel() {
     final override val state: StateFlow<MainContract.State>
         field = MutableStateFlow(
-            MainContract.State(
-                currentTab = MainTab.Settings,
-            )
+            MainContract.State.Preview
         )
 
     final override val effect: SharedFlow<MainContract.Effect>
