@@ -17,6 +17,7 @@ import moe.tabidachi.meeting.ui.auth.AuthRoute
 import moe.tabidachi.meeting.ui.auth.auth
 import moe.tabidachi.meeting.ui.main.MainRoute
 import moe.tabidachi.meeting.ui.main.main
+import moe.tabidachi.meeting.ui.meeting.create.createMeeting
 import org.koin.dsl.module
 
 val routeModule = module {
@@ -32,6 +33,7 @@ val routeModule = module {
     }
     auth()
     main()
+    createMeeting()
 }
 
 val appModule = module {

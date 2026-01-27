@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingRoute
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -25,7 +26,10 @@ fun MainRoute(
         actions = remember {
             MainContract.Actions(
                 onTabClick = { event(MainContract.Event.OnTabClick(it)) },
-                onLogout = { event(MainContract.Event.OnLogout) }
+                onLogout = { event(MainContract.Event.OnLogout) },
+                onScheduleMeetingClick = {
+                    backStack.add(CreateMeetingRoute)
+                }
             )
         }
     )

@@ -1,6 +1,6 @@
 package moe.tabidachi.meeting.domain.model
 
-import moe.tabidachi.meeting.data.model.Meeting
+import moe.tabidachi.meeting.model.MeetingStatus
 import moe.tabidachi.meeting.model.UserInfo
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -11,5 +11,5 @@ data class MeetingItem(
     val time: Instant,
     val duration: Duration,
     val participants: List<UserInfo>,
-    val status: Meeting.Status
+    val status: MeetingStatus
 )

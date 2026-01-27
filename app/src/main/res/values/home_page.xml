@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_page_todays_meetings">Today\'s Meetings</string>
+    <string name="home_page_view_all">View All</string>
+    <string name="home_page_join_button">Join</string>
+    <string name="home_page_schedule_meeting_button">Schedule Meeting</string>
+    <string name="home_page_join_now_button">Join Now</string>
+    <string name="home_page_tips_button">Confirm</string>
+</resources>

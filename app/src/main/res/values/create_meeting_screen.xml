@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_meeting_screen_title">Schedule Meeting</string>
+    <string name="create_meeting_screen_subtitle">Arrange a new video meeting</string>
+    <string name="create_meeting_screen_back_button">Back</string>
+    <string name="create_meeting_screen_topic_label">Meeting Topic</string>
+    <string name="create_meeting_screen_topic_placeholder">e.g., Product Review Meeting</string>
+    <string name="create_meeting_screen_description_label">Meeting Description</string>
+    <string name="create_meeting_screen_description_placeholder">Add meeting agenda or notes...</string>
+    <string name="create_meeting_screen_date_time_label">Date &amp; Time</string>
+    <string name="create_meeting_screen_participants_label">Participants</string>
+    <string name="create_meeting_screen_participants_empty">Select participants</string>
+    <string name="create_meeting_screen_participants_add_more">Add more participants</string>
+    <string name="create_meeting_screen_meeting_settings_label">Meeting Settings</string>
+    <string name="create_meeting_screen_cancel_button">Cancel</string>
+    <string name="create_meeting_screen_schedule_button">Schedule Meeting</string>
+    <string name="create_meeting_screen_tips_title">Meeting Link</string>
+    <string name="create_meeting_screen_tips_description">A unique meeting link will be generated after creation, participants can join directly via the link</string>
+    <string name="create_meeting_screen_auto_record">Auto Record</string>
+    <string name="create_meeting_screen_auto_record_subtitle">Automatically record when meeting starts</string>
+    <string name="create_meeting_screen_ai_transcription">AI Live Transcription</string>
+    <string name="create_meeting_screen_ai_transcription_subtitle">Enable smart speech-to-text</string>
+    <string name="create_meeting_screen_reminder">Meeting Reminder</string>
+    <string name="create_meeting_screen_reminder_subtitle">15 minutes before start</string>
+    <string name="create_meeting_screen_start_time_label">Start Time</string>
+    <string name="create_meeting_screen_start_time_placeholder">Select date and time</string>
+    <string name="create_meeting_screen_duration_label">Duration</string>
+    <string name="create_meeting_screen_duration_placeholder">Select meeting duration</string>
+</resources>

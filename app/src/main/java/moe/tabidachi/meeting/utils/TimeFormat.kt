@@ -106,25 +106,25 @@ object TimeFormat {
         LocalDateTime.Format {
             when (isToday) {
                 true -> when (is24HourFormat) {
-                    true -> when (locale) {
-                        Locale.CHINESE -> time(HOUR_MINUTE_24H_FORMAT)
+                    true -> when (locale.language) {
+                        Locale.SIMPLIFIED_CHINESE.language -> time(HOUR_MINUTE_24H_FORMAT)
                         else -> time(HOUR_MINUTE_24H_FORMAT)
                     }
 
-                    false -> when (locale) {
-                        Locale.CHINESE -> time(HOUR_MINUTE_12H_FORMAT_CHINESE)
+                    false -> when (locale.language) {
+                        Locale.SIMPLIFIED_CHINESE.language -> time(HOUR_MINUTE_12H_FORMAT_CHINESE)
                         else -> time(HOUR_MINUTE_12H_FORMAT_ENGLISH)
                     }
                 }
 
                 false -> when (is24HourFormat) {
-                    true -> when (locale) {
-                        Locale.CHINESE -> dateTime(MONTH_DAY_HOUR_MINUTE_24H_FORMAT_CHINESE)
+                    true -> when (locale.language) {
+                        Locale.SIMPLIFIED_CHINESE.language -> dateTime(MONTH_DAY_HOUR_MINUTE_24H_FORMAT_CHINESE)
                         else -> dateTime(MONTH_DAY_HOUR_MINUTE_24H_FORMAT_ENGLISH)
                     }
 
-                    false -> when (locale) {
-                        Locale.CHINESE -> dateTime(MONTH_DAY_HOUR_MINUTE_12H_FORMAT_CHINESE)
+                    false -> when (locale.language) {
+                        Locale.SIMPLIFIED_CHINESE.language -> dateTime(MONTH_DAY_HOUR_MINUTE_12H_FORMAT_CHINESE)
                         else -> dateTime(MONTH_DAY_HOUR_MINUTE_12H_FORMAT_ENGLISH)
                     }
                 }

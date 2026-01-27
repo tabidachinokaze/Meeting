@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import moe.tabidachi.compose.mvi.BackingFieldsViewModel
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.UserApi
-import moe.tabidachi.meeting.data.model.Meeting
 import moe.tabidachi.meeting.domain.model.MeetingItem
 import moe.tabidachi.meeting.ktx.TAG
+import moe.tabidachi.meeting.model.MeetingStatus
 import moe.tabidachi.meeting.model.StatusCode
 import moe.tabidachi.meeting.model.UserInfo
 import moe.tabidachi.meeting.model.statusCode
@@ -68,7 +68,7 @@ interface MainContract {
                                 username = "Alex P."
                             )
                         ),
-                        status = Meeting.Status.Upcoming
+                        status = MeetingStatus.Upcoming
                     ),
                     MeetingItem(
                         id = 1,
@@ -85,7 +85,7 @@ interface MainContract {
                                 username = "John D."
                             )
                         ),
-                        status = Meeting.Status.Upcoming
+                        status = MeetingStatus.Upcoming
                     )
                 )
             )
@@ -105,7 +105,9 @@ interface MainContract {
         val onCalendarClick: () -> Unit = {},
         val onLanguageClick: () -> Unit = {},
         val onHelpClick: () -> Unit = {},
-        val onLogout: () -> Unit = {}
+        val onLogout: () -> Unit = {},
+        val onScheduleMeetingClick: () -> Unit = {},
+        val onJoinNowClick: () -> Unit = {},
     )
 
     sealed interface Event {

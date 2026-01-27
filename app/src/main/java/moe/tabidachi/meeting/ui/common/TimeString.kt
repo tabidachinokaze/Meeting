@@ -19,8 +19,8 @@ fun monthDayWeekTimeString(
     timeZone: TimeZone = TimeZone.currentSystemDefault()
 ): String {
     val locale = LocalConfiguration.current.locales[0]
-    val format = when (locale) {
-        Locale.SIMPLIFIED_CHINESE -> TimeFormat.MONTH_DAY_WEEK_FORMAT_CHINESE
+    val format = when (locale.language) {
+        Locale.SIMPLIFIED_CHINESE.language -> TimeFormat.MONTH_DAY_WEEK_FORMAT_CHINESE
         else -> TimeFormat.MONTH_DAY_WEEK_FORMAT_ENGLISH
     }
     return instant.toLocalDateTime(timeZone).date.format(format)

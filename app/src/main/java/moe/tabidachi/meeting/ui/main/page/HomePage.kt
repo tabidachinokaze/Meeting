@@ -38,7 +38,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.ui.common.ProvideContentColorTextStyle
 import moe.tabidachi.meeting.ui.common.autoTimeString
 import moe.tabidachi.meeting.ui.common.monthDayWeekTimeString
@@ -68,13 +70,16 @@ fun HomePage(
     Row(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        Text(text = "Today's Meetings", modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(R.string.home_page_todays_meetings),
+            modifier = Modifier.weight(1f)
+        )
         TextButton(
             onClick = {
 
             }
         ) {
-            Text(text = "View All")
+            Text(text = stringResource(R.string.home_page_view_all))
         }
     }
     state.meetings.forEach {
@@ -199,7 +204,7 @@ fun MeetingCard(
                     contentDescription = Icons.Outlined.Videocam.name,
                     modifier = Modifier.size(20.dp)
                 )
-                Text(text = "Join")
+                Text(text = stringResource(R.string.home_page_join_button))
             }
         }
     }
@@ -215,9 +220,7 @@ fun MeetingsButtons(
     modifier = modifier
 ) {
     Button(
-        onClick = {
-
-        },
+        onClick = actions.onScheduleMeetingClick,
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(),
         modifier = Modifier
@@ -228,13 +231,11 @@ fun MeetingsButtons(
             imageVector = Icons.Rounded.Add,
             contentDescription = Icons.Rounded.Add.name
         )
-        Text(text = "Schedule Meeting")
+        Text(text = stringResource(R.string.home_page_schedule_meeting_button))
     }
 
     Button(
-        onClick = {
-
-        },
+        onClick = actions.onJoinNowClick,
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.textButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -248,7 +249,7 @@ fun MeetingsButtons(
             imageVector = Icons.Outlined.AccessTime,
             contentDescription = Icons.Outlined.AccessTime.name
         )
-        Text(text = "Join Now")
+        Text(text = stringResource(R.string.home_page_join_now_button))
     }
 }
 
@@ -334,7 +335,7 @@ private fun HomeTips(
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp)
         ) {
-            Text(text = "确定")
+            Text(text = stringResource(R.string.home_page_tips_button))
         }
     }
 }

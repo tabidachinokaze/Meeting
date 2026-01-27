@@ -1,5 +1,6 @@
 package moe.tabidachi.meeting.database.entity
 
+import moe.tabidachi.meeting.database.table.MeetingParticipantsTable
 import moe.tabidachi.meeting.database.table.UserTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.LongEntity
@@ -15,4 +16,6 @@ class UserEntity(uid: EntityID<Long>) : LongEntity(uid) {
     var avatar by UserTable.avatar
     var createTime by UserTable.createTime
     var updateTime by UserTable.updateTime
+
+    val meeting by MeetingEntity via MeetingParticipantsTable
 }

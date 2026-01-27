@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_page_todays_meetings">今日会议</string>
+    <string name="home_page_view_all">查看全部</string>
+    <string name="home_page_join_button">加入会议</string>
+    <string name="home_page_schedule_meeting_button">预定会议</string>
+    <string name="home_page_join_now_button">立即加入</string>
+    <string name="home_page_tips_button">确定</string>
+</resources>

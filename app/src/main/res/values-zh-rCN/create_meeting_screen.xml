@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_meeting_screen_title">预定会议</string>
+    <string name="create_meeting_screen_subtitle">安排新的视频会议</string>
+    <string name="create_meeting_screen_back_button">返回</string>
+    <string name="create_meeting_screen_topic_label">会议主题</string>
+    <string name="create_meeting_screen_topic_placeholder">例如：产品评审会议</string>
+    <string name="create_meeting_screen_description_label">会议描述</string>
+    <string name="create_meeting_screen_description_placeholder">添加会议议程或备注…</string>
+    <string name="create_meeting_screen_date_time_label">日期和时间</string>
+    <string name="create_meeting_screen_participants_label">参会者</string>
+    <string name="create_meeting_screen_participants_empty">选择参会者</string>
+    <string name="create_meeting_screen_participants_add_more">添加更多参与者</string>
+    <string name="create_meeting_screen_meeting_settings_label">会议设置</string>
+    <string name="create_meeting_screen_cancel_button">取消</string>
+    <string name="create_meeting_screen_schedule_button">预定会议</string>
+    <string name="create_meeting_screen_tips_title">会议链接</string>
+    <string name="create_meeting_screen_tips_description">创建后将生成唯一的会议链接，参会者可以直接通过链接加入</string>
+    <string name="create_meeting_screen_auto_record">自动录制</string>
+    <string name="create_meeting_screen_auto_record_subtitle">会议开始时自动录制</string>
+    <string name="create_meeting_screen_ai_transcription">AI实时转录</string>
+    <string name="create_meeting_screen_ai_transcription_subtitle">启用智能语音转文字</string>
+    <string name="create_meeting_screen_reminder">会议提醒</string>
+    <string name="create_meeting_screen_reminder_subtitle">开始前15分钟提醒</string>
+    <string name="create_meeting_screen_start_time_label">开始时间</string>
+    <string name="create_meeting_screen_start_time_placeholder">选择日期和时间</string>
+    <string name="create_meeting_screen_duration_label">时长</string>
+    <string name="create_meeting_screen_duration_placeholder">选择会议时长</string>
+</resources>

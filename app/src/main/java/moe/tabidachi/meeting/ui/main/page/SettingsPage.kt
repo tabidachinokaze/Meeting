@@ -57,6 +57,7 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import moe.tabidachi.meeting.R
+import moe.tabidachi.meeting.ui.common.Avatar
 import moe.tabidachi.meeting.ui.common.MonogramAvatar
 import moe.tabidachi.meeting.ui.common.ProvideContentColorTextStyle
 import moe.tabidachi.meeting.ui.common.getLocale
@@ -146,21 +147,11 @@ private fun ProfileHeader(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        SubcomposeAsyncImage(
+        Avatar(
+            name = state.userInfo?.username,
             model = state.userInfo?.avatar,
-            contentDescription = "profile image",
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(56.dp)
-        ) {
-            when (painter.state.collectAsState().value) {
-                is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
-                else -> MonogramAvatar(
-                    name = state.userInfo?.username.orEmpty(),
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
+            modifier = Modifier.size(56.dp)
+        )
         ListItem(
             headlineContent = {
                 Text(

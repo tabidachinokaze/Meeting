@@ -3,10 +3,12 @@ package moe.tabidachi.meeting.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -18,8 +20,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImagePainter
+import coil3.compose.SubcomposeAsyncImage
+import coil3.compose.SubcomposeAsyncImageContent
 import moe.tabidachi.meeting.utils.Gradients
 import kotlin.math.absoluteValue
+
+@Composable
+fun Avatar(
+    name: String?,
+    model: Any?,
+    modifier: Modifier = Modifier
+) = SubcomposeAsyncImage(
+    model = model,
+    contentDescription = "profile image",
+    modifier = modifier
+        .size(40.dp)
+        .clip(CircleShape)
+) {
+    when (painter.state.collectAsState().value) {
+        is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
+        else -> MonogramAvatar(
+            name = name.orEmpty(),
+            modifier = modifier.fillMaxSize()
+        )
+    }
+}
 
 @Composable
 fun MonogramAvatar(
