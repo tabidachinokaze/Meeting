@@ -1,4 +1,4 @@
-package moe.tabidachi.meeting.ui.meeting.create
+package moe.tabidachi.meeting.ui.participants.select
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -6,26 +6,27 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
-import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingContract
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingViewModel
 
 @Serializable
-data object CreateMeetingRoute : NavKey
+data object SelectParticipantsRoute : NavKey
 
 @Composable
-fun CreateMeetingRoute(
+fun SelectParticipantsRoute(
     backStack: NavBackStack<NavKey>,
     viewModel: CreateMeetingViewModel
 ) {
     val (state, event) = viewModel.observe { }
-    CreateMeetingScreen(
+    SelectParticipantsScreen(
         state = state.value,
         actions = remember {
             CreateMeetingContract.Actions(
                 onNavigateUp = {
                     backStack.removeLastOrNull()
                 },
-                onNavigateToSelectParticipants = {
-                    backStack.add(SelectParticipantsRoute)
+                onParticipantAddOrRemove = {
+                    event(CreateMeetingContract.Event.OnParticipantAddOrRemove(it))
                 }
             )
         }

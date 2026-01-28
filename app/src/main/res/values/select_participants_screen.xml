@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_participants_screen_title">Select Participants</string>
+    <string name="select_participants_screen_subtitle_format">Selected: %d people</string>
+    <string name="select_participants_screen_search_placeholder">Search contacts</string>
+    <string name="select_participants_screen_cancel_button">Cancel</string>
+    <string name="select_participants_screen_confirm_button">Confirm</string>
+</resources>

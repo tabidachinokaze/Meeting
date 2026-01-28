@@ -10,12 +10,6 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
-import org.koin.androidx.scope.dsl.activityScope
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
-import org.koin.dsl.navigation3.navigation
 
 @Serializable
 data object AuthRoute : NavKey
@@ -52,20 +46,5 @@ fun AuthRoute(
                 )
             }
         )
-    }
-}
-
-@OptIn(KoinExperimentalAPI::class)
-fun Module.auth() {
-    viewModel {
-        AuthViewModel(
-            context = get(),
-            authApi = get(),
-            dataStore = get(),
-            backStack = get()
-        )
-    }
-    navigation<AuthRoute> {
-        AuthRoute(viewModel = koinViewModel())
     }
 }

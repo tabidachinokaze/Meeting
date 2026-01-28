@@ -14,26 +14,70 @@ import moe.tabidachi.meeting.ktx.dataStore
 import moe.tabidachi.meeting.shared.SharedHttpClient
 import moe.tabidachi.meeting.shared.SharedJson
 import moe.tabidachi.meeting.ui.auth.AuthRoute
-import moe.tabidachi.meeting.ui.auth.auth
+import moe.tabidachi.meeting.ui.auth.AuthViewModel
 import moe.tabidachi.meeting.ui.main.MainRoute
-import moe.tabidachi.meeting.ui.main.main
-import moe.tabidachi.meeting.ui.meeting.create.createMeeting
+import moe.tabidachi.meeting.ui.main.MainViewModel
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingRoute
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingViewModel
+import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
+import org.koin.androidx.scope.dsl.activityRetainedScope
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
+@OptIn(KoinExperimentalAPI::class)
 val routeModule = module {
-    single<NavBackStack<NavKey>> {
-        val settingsDataStore: SettingsDataStore = get()
-        val startDestination: NavKey = when (settingsDataStore.token) {
-            null -> AuthRoute
-            else -> MainRoute
+    activityRetainedScope {
+        scoped<NavBackStack<NavKey>> {
+            val settingsDataStore: SettingsDataStore = get()
+            val startDestination: NavKey = when (settingsDataStore.token) {
+                null -> AuthRoute
+                else -> MainRoute
+            }
+            val backStack = NavBackStack(startDestination)
+            settingsDataStore.setBackStack(backStack)
+            backStack
         }
-        val backStack = NavBackStack(startDestination)
-        settingsDataStore.setBackStack(backStack)
-        backStack
+        scoped {
+            CreateMeetingViewModel()
+        }
+        viewModel {
+            AuthViewModel(
+                context = get(),
+                authApi = get(),
+                dataStore = get(),
+                backStack = get()
+            )
+        }
+        navigation<AuthRoute> {
+            AuthRoute(viewModel = get())
+        }
+        scoped {
+            MainViewModel(
+                userApi = get(),
+                dataStore = get()
+            )
+        }
+        navigation<MainRoute> {
+            MainRoute(
+                backStack = get(),
+                viewModel = get(),
+            )
+        }
+        navigation<CreateMeetingRoute> {
+            CreateMeetingRoute(
+                backStack = get(),
+                viewModel = get(),
+            )
+        }
+        navigation<SelectParticipantsRoute> {
+            SelectParticipantsRoute(
+                backStack = get(),
+                viewModel = get()
+            )
+        }
     }
-    auth()
-    main()
-    createMeeting()
 }
 
 val appModule = module {

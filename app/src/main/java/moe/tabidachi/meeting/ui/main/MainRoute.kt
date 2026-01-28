@@ -7,10 +7,6 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingRoute
-import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
-import org.koin.dsl.navigation3.navigation
 
 @Serializable
 data object MainRoute : NavKey
@@ -33,20 +29,4 @@ fun MainRoute(
             )
         }
     )
-}
-
-@OptIn(KoinExperimentalAPI::class)
-fun Module.main() {
-    viewModel {
-        MainViewModel(
-            userApi = get(),
-            dataStore = get()
-        )
-    }
-    navigation<MainRoute> {
-        MainRoute(
-            backStack = get(),
-            viewModel = get(),
-        )
-    }
 }

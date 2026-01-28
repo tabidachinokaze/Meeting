@@ -2,6 +2,7 @@ package moe.tabidachi.meeting.ui.meeting.create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -26,8 +26,6 @@ import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Videocam
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -53,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.ui.common.AppBar
 import moe.tabidachi.meeting.ui.common.Avatar
+import moe.tabidachi.meeting.ui.common.BottomButtons
 import moe.tabidachi.meeting.ui.common.ProvideContentColorTextStyle
 import moe.tabidachi.meeting.ui.preview.PreviewTheme
 import moe.tabidachi.meeting.ui.preview.Previews
@@ -74,9 +73,7 @@ fun CreateMeetingScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-
-                        }
+                        onClick = actions.onNavigateUp
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -85,108 +82,74 @@ fun CreateMeetingScreen(
                     }
                 }
             )
-        }
+        }, bottomBar = {
+            BottomButtons(
+                negativeContent = {
+                    Text(text = stringResource(R.string.create_meeting_screen_cancel_button))
+                },
+                positiveContent = {
+                    Text(text = stringResource(R.string.create_meeting_screen_schedule_button))
+                },
+                onNegativeClick = actions.onNavigateUp,
+                onPositiveClick = actions.onScheduleMeeting,
+                modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f))
+                    .padding(16.dp)
+                    .navigationBarsPadding()
+            )
+        }, modifier = Modifier.imePadding()
     ) {
-        Column(
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .imePadding()
                 .padding(top = it.calculateTopPadding())
                 .padding(horizontal = 16.dp)
                 .fillMaxSize()
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                item {
-                    Spacer(modifier = Modifier)
-                }
-                item {
-                    LabelTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = {
-                            Text(text = stringResource(R.string.create_meeting_screen_topic_label))
-                        }, placeholder = {
-                            Text(text = stringResource(R.string.create_meeting_screen_topic_placeholder))
-                        }
-                    )
-                }
-                item {
-                    LabelTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = {
-                            Text(text = stringResource(R.string.create_meeting_screen_description_label))
-                        }, placeholder = {
-                            Text(text = stringResource(R.string.create_meeting_screen_description_placeholder))
-                        }
-                    )
-                }
-                item {
-                    DateTime()
-                }
-                item {
-                    Participants(
-                        state = state,
-                        actions = actions,
-                    )
-                }
-                item {
-                    MeetingSettings()
-                }
-                item {
-                    CreateMeetingTips()
-                }
-                item {
-                    Spacer(modifier = Modifier)
-                }
+            item {
+                Spacer(modifier = Modifier)
             }
-            BottomButtons(
-                state = state,
-                actions = actions,
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .navigationBarsPadding()
-            )
+            item {
+                LabelTextField(
+                    value = "",
+                    onValueChange = {},
+                    label = {
+                        Text(text = stringResource(R.string.create_meeting_screen_topic_label))
+                    }, placeholder = {
+                        Text(text = stringResource(R.string.create_meeting_screen_topic_placeholder))
+                    }
+                )
+            }
+            item {
+                LabelTextField(
+                    value = "",
+                    onValueChange = {},
+                    label = {
+                        Text(text = stringResource(R.string.create_meeting_screen_description_label))
+                    }, placeholder = {
+                        Text(text = stringResource(R.string.create_meeting_screen_description_placeholder))
+                    }
+                )
+            }
+            item {
+                DateTime()
+            }
+            item {
+                Participants(
+                    state = state,
+                    actions = actions,
+                )
+            }
+            item {
+                MeetingSettings()
+            }
+            item {
+                CreateMeetingTips()
+            }
+            item {
+                Spacer(modifier = Modifier.padding(bottom = it.calculateBottomPadding()))
+            }
         }
-    }
-}
-
-@Composable
-fun BottomButtons(
-    state: CreateMeetingContract.State,
-    actions: CreateMeetingContract.Actions,
-    modifier: Modifier = Modifier
-) = Row(
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(16.dp),
-    modifier = modifier
-) {
-    Button(
-        onClick = {
-
-        }, shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-        modifier = Modifier
-            .weight(1f)
-            .height(48.dp)
-    ) {
-        Text(text = stringResource(R.string.create_meeting_screen_cancel_button))
-    }
-    Button(
-        onClick = {
-
-        }, shape = RoundedCornerShape(16.dp),
-        modifier = Modifier
-            .weight(1f)
-            .height(48.dp)
-    ) {
-        Text(text = stringResource(R.string.create_meeting_screen_schedule_button))
     }
 }
 
@@ -369,7 +332,9 @@ fun Participants(
                 }
             )
         }
-        ParticipantsAddItem {
+        ParticipantsAddItem(
+            onClick = actions.onNavigateToSelectParticipants
+        ) {
             Icon(
                 imageVector = Icons.Default.PeopleOutline,
                 contentDescription = Icons.Default.PeopleOutline.name,
@@ -427,6 +392,7 @@ fun ParticipantsListItem(
 
 @Composable
 fun ParticipantsAddItem(
+    onClick: () -> Unit,
     dashColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     content: @Composable RowScope.() -> Unit,
 ) = Box(
@@ -454,6 +420,7 @@ fun ParticipantsAddItem(
         }
         .clip(RoundedCornerShape(16.dp))
         .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
+        .clickable(onClick = onClick)
         .padding(vertical = 8.dp, horizontal = 16.dp)
 
 ) {
