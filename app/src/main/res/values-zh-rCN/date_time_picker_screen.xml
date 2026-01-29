@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_time_picker_screen_cancel_button">取消</string>
+    <string name="date_time_picker_screen_next_button">下一步</string>
+    <string name="date_time_picker_screen_previous_button">上一步</string>
+    <string name="date_time_picker_screen_confirm_button">确定</string>
+</resources>

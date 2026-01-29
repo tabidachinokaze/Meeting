@@ -132,7 +132,10 @@ fun CreateMeetingScreen(
                 )
             }
             item {
-                DateTime()
+                DateTime(
+                    state = state,
+                    actions = actions,
+                )
             }
             item {
                 Participants(
@@ -434,6 +437,8 @@ fun ParticipantsAddItem(
 
 @Composable
 fun DateTime(
+    state: CreateMeetingContract.State,
+    actions: CreateMeetingContract.Actions,
     modifier: Modifier = Modifier,
 ) = Column(
     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -456,8 +461,12 @@ fun DateTime(
             Text(text = stringResource(R.string.create_meeting_screen_start_time_label))
         },
         headlineContent = {
-            Text(text = stringResource(R.string.create_meeting_screen_start_time_placeholder))
-        }
+            when (state.selectedDateTime) {
+                null -> Text(text = stringResource(R.string.create_meeting_screen_start_time_placeholder))
+                else -> Text(text = state.selectedDateTime.toString())
+            }
+        },
+        onClick = actions.onDateTimePick
     )
     DateTimeListItem(
         overlineContent = {
@@ -465,7 +474,8 @@ fun DateTime(
         },
         headlineContent = {
             Text(text = stringResource(R.string.create_meeting_screen_duration_placeholder))
-        }
+        },
+        onClick = actions.onDurationPick
     )
 }
 
@@ -473,11 +483,13 @@ fun DateTime(
 fun DateTimeListItem(
     overlineContent: @Composable () -> Unit,
     headlineContent: @Composable () -> Unit,
+    onClick: () -> Unit
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
         .shadow(1.dp, RoundedCornerShape(16.dp))
         .clip(RoundedCornerShape(16.dp))
+        .clickable(onClick = onClick)
         .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
         .padding(16.dp)
 ) {

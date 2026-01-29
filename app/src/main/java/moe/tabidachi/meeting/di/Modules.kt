@@ -1,10 +1,13 @@
 package moe.tabidachi.meeting.di
 
 import android.content.Context
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.scene.DialogSceneStrategy
 import io.ktor.client.HttpClient
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.AuthApi
@@ -15,8 +18,10 @@ import moe.tabidachi.meeting.shared.SharedHttpClient
 import moe.tabidachi.meeting.shared.SharedJson
 import moe.tabidachi.meeting.ui.auth.AuthRoute
 import moe.tabidachi.meeting.ui.auth.AuthViewModel
+import moe.tabidachi.meeting.ui.datetime.DateTimePickerScreen
 import moe.tabidachi.meeting.ui.main.MainRoute
 import moe.tabidachi.meeting.ui.main.MainViewModel
+import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingContract
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingRoute
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingViewModel
 import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
@@ -26,7 +31,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 val routeModule = module {
     activityRetainedScope {
         scoped<NavBackStack<NavKey>> {
@@ -77,8 +82,27 @@ val routeModule = module {
                 viewModel = get()
             )
         }
+        navigation<DateTimePickerRoute>(
+            metadata = DialogSceneStrategy.dialog()
+        ) {
+            val backStack: NavBackStack<NavKey> = get()
+            val viewModel: CreateMeetingViewModel = get()
+            DateTimePickerScreen(
+                onNavigateUp = {
+                    backStack.removeLastOrNull()
+                },
+                onDateTimePicked = {
+                    viewModel.event(
+                        event = CreateMeetingContract.Event.OnDateTimePicked(it)
+                    )
+                }
+            )
+        }
     }
 }
+
+@Serializable
+data object DateTimePickerRoute : NavKey
 
 val appModule = module {
     single<DataStore<Settings>> {

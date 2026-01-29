@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_time_picker_screen_cancel_button">Cancel</string>
+    <string name="date_time_picker_screen_next_button">Next</string>
+    <string name="date_time_picker_screen_previous_button">Previous</string>
+    <string name="date_time_picker_screen_confirm_button">Confirm</string>
+</resources>
