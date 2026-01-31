@@ -37,6 +37,7 @@ import androidx.compose.ui.window.DialogProperties
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDateTime
 import moe.tabidachi.meeting.R
 import kotlin.time.Clock
@@ -46,7 +47,12 @@ import kotlin.time.Instant
 @Composable
 fun DateTimePickerScreen(
     onNavigateUp: () -> Unit,
-    onDateTimePicked: (LocalDateTime) -> Unit
+    onDateTimePicked: (LocalDateTime) -> Unit,
+    initialDataTime: LocalDateTime? = null
+) = BasicAlertDialog(
+    onDismissRequest = onNavigateUp,
+    properties = DialogProperties(usePlatformDefaultWidth = false),
+    modifier = Modifier.padding(horizontal = 16.dp)
 ) {
     var dateTime by remember { mutableStateOf(DateTime.DATE) }
     val datePickerState = rememberDatePickerState(
@@ -63,102 +69,99 @@ fun DateTimePickerScreen(
             override fun isSelectableYear(year: Int): Boolean {
                 return year >= today.year
             }
-        }
+        },
+        initialSelectedDate = initialDataTime?.date?.toJavaLocalDate()
     )
-    val timePickerState = rememberTimePickerState()
+    val timePickerState = rememberTimePickerState(
+        initialHour = initialDataTime?.hour ?: 0,
+        initialMinute = initialDataTime?.minute ?: 0
+    )
 
-    BasicAlertDialog(
-        onDismissRequest = onNavigateUp,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End,
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(color = MaterialTheme.colorScheme.surface)
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(color = MaterialTheme.colorScheme.surface)
-        ) {
-            AnimatedContent(
-                targetState = dateTime,
-                transitionSpec = {
-                    val slideDirection = when {
-                        initialState == DateTime.DATE && targetState == DateTime.TIME ->
-                            AnimatedContentTransitionScope.SlideDirection.Left
+        AnimatedContent(
+            targetState = dateTime,
+            transitionSpec = {
+                val slideDirection = when {
+                    initialState == DateTime.DATE && targetState == DateTime.TIME ->
+                        AnimatedContentTransitionScope.SlideDirection.Left
 
-                        else -> AnimatedContentTransitionScope.SlideDirection.Right
-                    }
-
-                    slideIntoContainer(
-                        towards = slideDirection,
-                        animationSpec = tween(durationMillis = 300)
-                    ) togetherWith slideOutOfContainer(
-                        towards = slideDirection,
-                        animationSpec = tween(durationMillis = 300)
-                    )
+                    else -> AnimatedContentTransitionScope.SlideDirection.Right
                 }
-            ) { targetState ->
-                when (targetState) {
-                    DateTime.DATE -> DatePicker(
-                        state = datePickerState,
-                        colors = DatePickerDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                        )
-                    )
 
-                    DateTime.TIME -> TimePicker(
-                        state = timePickerState,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
+                slideIntoContainer(
+                    towards = slideDirection,
+                    animationSpec = tween(durationMillis = 300)
+                ) togetherWith slideOutOfContainer(
+                    towards = slideDirection,
+                    animationSpec = tween(durationMillis = 300)
+                )
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
-            ) {
-                when (dateTime) {
-                    DateTime.DATE -> {
-                        TextButton(
-                            onClick = onNavigateUp
-                        ) {
-                            Text(text = stringResource(R.string.date_time_picker_screen_cancel_button))
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        TextButton(
-                            onClick = {
-                                dateTime = DateTime.TIME
-                            }, enabled = datePickerState.selectedDateMillis != null
-                        ) {
-                            Text(text = stringResource(R.string.date_time_picker_screen_next_button))
-                        }
-                    }
+        ) { targetState ->
+            when (targetState) {
+                DateTime.DATE -> DatePicker(
+                    state = datePickerState,
+                    colors = DatePickerDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    )
+                )
 
-                    DateTime.TIME -> {
-                        TextButton(
-                            onClick = {
-                                dateTime = DateTime.DATE
-                            }
-                        ) {
-                            Text(text = stringResource(R.string.date_time_picker_screen_previous_button))
+                DateTime.TIME -> TimePicker(
+                    state = timePickerState,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            when (dateTime) {
+                DateTime.DATE -> {
+                    TextButton(
+                        onClick = onNavigateUp
+                    ) {
+                        Text(text = stringResource(R.string.date_time_picker_screen_cancel_button))
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(
+                        onClick = {
+                            dateTime = DateTime.TIME
+                        }, enabled = datePickerState.selectedDateMillis != null
+                    ) {
+                        Text(text = stringResource(R.string.date_time_picker_screen_next_button))
+                    }
+                }
+
+                DateTime.TIME -> {
+                    TextButton(
+                        onClick = {
+                            dateTime = DateTime.DATE
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        TextButton(
-                            onClick = {
-                                val date = Instant
-                                    .fromEpochMilliseconds(datePickerState.selectedDateMillis ?: 0)
-                                    .toLocalDateTime(TimeZone.currentSystemDefault()).date
-                                val time = LocalTime(
-                                    hour = timePickerState.hour,
-                                    minute = timePickerState.minute,
-                                    second = 0
-                                )
-                                onDateTimePicked(LocalDateTime(date, time))
-                                onNavigateUp()
-                            }
-                        ) {
-                            Text(text = stringResource(R.string.date_time_picker_screen_confirm_button))
+                    ) {
+                        Text(text = stringResource(R.string.date_time_picker_screen_previous_button))
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(
+                        onClick = {
+                            val date = Instant
+                                .fromEpochMilliseconds(datePickerState.selectedDateMillis ?: 0)
+                                .toLocalDateTime(TimeZone.currentSystemDefault()).date
+                            val time = LocalTime(
+                                hour = timePickerState.hour,
+                                minute = timePickerState.minute,
+                                second = 0
+                            )
+                            onDateTimePicked(LocalDateTime(date, time))
+                            onNavigateUp()
                         }
+                    ) {
+                        Text(text = stringResource(R.string.date_time_picker_screen_confirm_button))
                     }
                 }
             }

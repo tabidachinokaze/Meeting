@@ -42,6 +42,7 @@ kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_21
         freeCompilerArgs.addAll(
+            "-Xcontext-parameters",
             "-Xexplicit-backing-fields",
             "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
         )

@@ -2,6 +2,10 @@ package moe.tabidachi.meeting.di
 
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -9,6 +13,7 @@ import androidx.navigation3.scene.DialogSceneStrategy
 import io.ktor.client.HttpClient
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.AuthApi
 import moe.tabidachi.meeting.data.api.UserApi
@@ -18,6 +23,8 @@ import moe.tabidachi.meeting.shared.SharedHttpClient
 import moe.tabidachi.meeting.shared.SharedJson
 import moe.tabidachi.meeting.ui.auth.AuthRoute
 import moe.tabidachi.meeting.ui.auth.AuthViewModel
+import moe.tabidachi.meeting.ui.common.DurationPickerDialog
+import moe.tabidachi.meeting.ui.common.rememberDurationPickerState
 import moe.tabidachi.meeting.ui.datetime.DateTimePickerScreen
 import moe.tabidachi.meeting.ui.main.MainRoute
 import moe.tabidachi.meeting.ui.main.MainViewModel
@@ -40,7 +47,7 @@ val routeModule = module {
                 null -> AuthRoute
                 else -> MainRoute
             }
-            val backStack = NavBackStack(startDestination)
+            val backStack: NavBackStack<NavKey> = NavBackStack(startDestination)
             settingsDataStore.setBackStack(backStack)
             backStack
         }
@@ -82,7 +89,7 @@ val routeModule = module {
                 viewModel = get()
             )
         }
-        navigation<DateTimePickerRoute>(
+        navigation<DateTimePickerDialog>(
             metadata = DialogSceneStrategy.dialog()
         ) {
             val backStack: NavBackStack<NavKey> = get()
@@ -95,14 +102,50 @@ val routeModule = module {
                     viewModel.event(
                         event = CreateMeetingContract.Event.OnDateTimePicked(it)
                     )
-                }
+                },
+                initialDataTime = viewModel.state.collectAsState().value.selectedDateTime
+            )
+        }
+        navigation<DurationPickerDialog>(
+            metadata = DialogSceneStrategy.dialog()
+        ) {
+            val backStack: NavBackStack<NavKey> = get()
+            val viewModel: CreateMeetingViewModel = get()
+            val duration = viewModel.state.collectAsState().value.selectedDuration
+            val durationPickerState = rememberDurationPickerState(duration)
+            DurationPickerDialog(
+                state = durationPickerState,
+                onDismissRequest = { backStack.removeLastOrNull() },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.event(
+                                CreateMeetingContract.Event.OnDurationPicked(durationPickerState.duration)
+                            )
+                            backStack.removeLastOrNull()
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.duration_picker_dialog_confirm_button))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { backStack.removeLastOrNull() }
+                    ) {
+                        Text(text = stringResource(R.string.duration_picker_dialog_cancel_button))
+                    }
+                },
+                visibleItemCount = 5
             )
         }
     }
 }
 
 @Serializable
-data object DateTimePickerRoute : NavKey
+data object DateTimePickerDialog : NavKey
+
+@Serializable
+data object DurationPickerDialog : NavKey
 
 val appModule = module {
     single<DataStore<Settings>> {

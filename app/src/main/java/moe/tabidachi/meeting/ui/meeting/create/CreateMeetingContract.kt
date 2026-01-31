@@ -9,6 +9,7 @@ import kotlinx.datetime.LocalDateTime
 import moe.tabidachi.compose.mvi.BackingFieldsViewModel
 import moe.tabidachi.meeting.model.UserInfo
 import moe.tabidachi.meeting.ui.preview.userInfoList
+import kotlin.time.Duration
 
 interface CreateMeetingContract {
     abstract class ViewModel : BackingFieldsViewModel<State, Event, Effect>()
@@ -18,6 +19,7 @@ interface CreateMeetingContract {
         val participants: List<UserInfo> = emptyList(),
         val contacts: List<UserInfo> = emptyList(),
         val selectedDateTime: LocalDateTime? = null,
+        val selectedDuration: Duration? = null,
     ) {
         companion object {
             val Preview = State(
@@ -42,6 +44,7 @@ interface CreateMeetingContract {
     sealed interface Event {
         data class OnParticipantAddOrRemove(val participant: UserInfo) : Event
         data class OnDateTimePicked(val dateTime: LocalDateTime) : Event
+        data class OnDurationPicked(val duration: Duration) : Event
     }
 
     sealed interface Effect
@@ -64,6 +67,10 @@ class CreateMeetingViewModel : CreateMeetingContract.ViewModel() {
 
         is CreateMeetingContract.Event.OnDateTimePicked -> state.update {
             it.copy(selectedDateTime = event.dateTime)
+        }
+
+        is CreateMeetingContract.Event.OnDurationPicked -> state.update {
+            it.copy(selectedDuration = event.duration)
         }
     }
 }

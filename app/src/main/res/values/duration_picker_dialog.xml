@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="duration_picker_dialog_title">Select Duration</string>
+    <string name="duration_picker_dialog_cancel_button">Cancel</string>
+    <string name="duration_picker_dialog_confirm_button">Confirm</string>
+</resources>

@@ -473,7 +473,10 @@ fun DateTime(
             Text(text = stringResource(R.string.create_meeting_screen_duration_label))
         },
         headlineContent = {
-            Text(text = stringResource(R.string.create_meeting_screen_duration_placeholder))
+            when (state.selectedDuration) {
+                null -> Text(text = stringResource(R.string.create_meeting_screen_duration_placeholder))
+                else -> Text(text = state.selectedDuration.toString())
+            }
         },
         onClick = actions.onDurationPick
     )
