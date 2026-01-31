@@ -27,6 +27,7 @@ fun CreateMeetingRoute(
                     backStack.removeLastOrNull()
                 },
                 onNavigateToSelectParticipants = {
+                    event(CreateMeetingContract.Event.OnParticipantsSelectStart)
                     backStack.add(SelectParticipantsRoute)
                 },
                 onDateTimePick = {
@@ -34,6 +35,9 @@ fun CreateMeetingRoute(
                 },
                 onDurationPick = {
                     backStack.add(DurationPickerDialog)
+                },
+                onSelectedParticipantAddOrRemove = {
+                    event(CreateMeetingContract.Event.OnSelectedParticipantAddOrRemove(it))
                 }
             )
         }

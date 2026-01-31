@@ -23,6 +23,7 @@ argon2 = "2.12"
 datastore = "1.3.0-alpha04"
 jwtdecode = "2.0.2"
 coil-bom = "3.3.0"
+fuzzywuzzy-kotlin = "0.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -113,6 +114,7 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", versio
 s3 = { module = "aws.sdk.kotlin:s3", version.ref = "s3" }
 argon2-jvm = { module = "de.mkammerer:argon2-jvm", version.ref = "argon2" }
 jwtdecode = { group = "com.auth0.android", name = "jwtdecode", version.ref = "jwtdecode" }
+fuzzywuzzy-kotlin = { module = "com.willowtreeapps:fuzzywuzzy-kotlin", version.ref = "fuzzywuzzy-kotlin" }
 
 [bundles]
 ktor-client = [

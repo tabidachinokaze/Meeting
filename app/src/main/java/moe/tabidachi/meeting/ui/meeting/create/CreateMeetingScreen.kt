@@ -316,7 +316,7 @@ fun Participants(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        state.participants.forEach {
+        state.selectedParticipants.forEach {
             ParticipantsListItem(
                 headlineContent = {
                     Text(text = it.username)
@@ -332,6 +332,18 @@ fun Participants(
                         model = null,
                         modifier = Modifier.size(40.dp)
                     )
+                }, trailingContent = {
+                    IconButton(
+                        onClick = {
+                            actions.onSelectedParticipantAddOrRemove(it)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Clear,
+                            contentDescription = Icons.Rounded.Clear.name,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             )
         }
@@ -344,7 +356,7 @@ fun Participants(
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = when (state.participants.isEmpty()) {
+                text = when (state.selectedParticipants.isEmpty()) {
                     true -> stringResource(R.string.create_meeting_screen_participants_empty)
                     else -> stringResource(R.string.create_meeting_screen_participants_add_more)
                 }
@@ -358,6 +370,7 @@ fun ParticipantsListItem(
     headlineContent: @Composable () -> Unit,
     supportingContent: @Composable (() -> Unit)? = null,
     leadingContent: @Composable () -> Unit,
+    trailingContent: @Composable (() -> Unit)? = null,
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -386,11 +399,7 @@ fun ParticipantsListItem(
             }
         }
     }
-    Icon(
-        imageVector = Icons.Rounded.Clear,
-        contentDescription = Icons.Rounded.Clear.name,
-        tint = MaterialTheme.colorScheme.onSurfaceVariant
-    )
+    trailingContent?.invoke()
 }
 
 @Composable

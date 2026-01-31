@@ -25,7 +25,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -79,6 +82,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.datastore)
     implementation(libs.jwtdecode)
+    implementation(libs.fuzzywuzzy.kotlin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

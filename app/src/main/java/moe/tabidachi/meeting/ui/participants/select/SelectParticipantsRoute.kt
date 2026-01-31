@@ -27,6 +27,17 @@ fun SelectParticipantsRoute(
                 },
                 onParticipantAddOrRemove = {
                     event(CreateMeetingContract.Event.OnParticipantAddOrRemove(it))
+                },
+                onParticipantsSelectCancel = {
+                    backStack.removeLastOrNull()
+                    event(CreateMeetingContract.Event.OnParticipantsSelectCancel)
+                },
+                onParticipantsSelectConfirm = {
+                    backStack.removeLastOrNull()
+                    event(CreateMeetingContract.Event.OnParticipantsSelectConfirm)
+                },
+                onContactQueryChange = {
+                    event(CreateMeetingContract.Event.OnContactQueryChange(it))
                 }
             )
         }

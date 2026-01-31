@@ -12,15 +12,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -31,6 +34,7 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -78,7 +83,7 @@ fun SelectParticipantsScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = actions.onNavigateUp
+                            onClick = actions.onParticipantsSelectCancel
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -88,46 +93,50 @@ fun SelectParticipantsScreen(
                     }
                 )
                 SearchTextField(
-                    value = "",
-                    onValueChange = {
-
-                    },
+                    value = state.contactQuery,
+                    onValueChange = actions.onContactQueryChange,
                     placeholder = {
                         Text(text = stringResource(R.string.select_participants_screen_search_placeholder))
                     }
                 )
                 HorizontalDivider()
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp),
+                Column(
                     modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(horizontal = 8.dp)
-                        .fillMaxWidth()
+                        .heightIn(max = 144.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    state.participants.forEach { participant ->
-                        AssistChip(
-                            onClick = {
-                                actions.onParticipantAddOrRemove(participant)
-                            },
-                            label = { Text(text = participant.username) },
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Rounded.Clear,
-                                    contentDescription = Icons.Rounded.Clear.name,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }, shape = CircleShape,
-                            colors = AssistChipDefaults.assistChipColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                labelColor = MaterialTheme.colorScheme.primary
-                            ),
-                            border = AssistChipDefaults.assistChipBorder(
-                                enabled = true,
-                                borderColor = Color.Transparent
-                            ),
-                            modifier = Modifier.padding(0.dp)
-                        )
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                            .padding(horizontal = 8.dp)
+                            .fillMaxWidth()
+                    ) {
+                        state.participants.forEach { participant ->
+                            AssistChip(
+                                onClick = {
+                                    actions.onParticipantAddOrRemove(participant)
+                                },
+                                label = { Text(text = participant.username) },
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Clear,
+                                        contentDescription = Icons.Rounded.Clear.name,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }, shape = CircleShape,
+                                colors = AssistChipDefaults.assistChipColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                    labelColor = MaterialTheme.colorScheme.primary
+                                ),
+                                border = AssistChipDefaults.assistChipBorder(
+                                    enabled = true,
+                                    borderColor = Color.Transparent
+                                ),
+                                modifier = Modifier.padding(0.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -140,10 +149,8 @@ fun SelectParticipantsScreen(
                 positiveContent = {
                     Text(text = stringResource(R.string.select_participants_screen_confirm_button))
                 },
-                onNegativeClick = actions.onNavigateUp,
-                onPositiveClick = {
-
-                },
+                onNegativeClick = actions.onParticipantsSelectCancel,
+                onPositiveClick = actions.onParticipantsSelectConfirm,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f))
                     .padding(16.dp)
@@ -163,7 +170,7 @@ fun SelectParticipantsScreen(
         ) {
             item { Spacer(modifier = Modifier) }
             items(
-                state.contacts,
+                state.contactsSorted,
                 key = { it.uid },
             ) { contact ->
                 val selected: Boolean = contact in state.participants
@@ -192,6 +199,7 @@ fun SelectParticipantsScreen(
                             }
                         )
                         .padding(8.dp)
+                        .animateItem()
                 ) {
                     Avatar(
                         name = contact.username,
@@ -239,13 +247,10 @@ fun SearchTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: @Composable (() -> Unit)? = null,
-) = BasicTextField(
-    value = value,
-    onValueChange = onValueChange, decorationBox = { innerTextField ->
-        ProvideContentColorTextStyle(
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            textStyle = MaterialTheme.typography.bodyMedium
-        ) {
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange, decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -259,19 +264,24 @@ fun SearchTextField(
                         contentDescription = Icons.Rounded.Search.name
                     )
                 }
-                if (value.isEmpty()) {
-                    placeholder?.invoke()
-                } else {
+                Box(
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (value.isEmpty()) {
+                        placeholder?.invoke()
+                    }
                     innerTextField()
                 }
             }
-        }
-    },
-    modifier = modifier
-        .background(color = MaterialTheme.colorScheme.surfaceContainer)
-        .padding(horizontal = 8.dp)
-        .fillMaxWidth()
-)
+        },
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+        textStyle = LocalTextStyle.current,
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+    )
+}
 
 @Composable
 @Previews
