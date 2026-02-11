@@ -2,11 +2,11 @@ ktor:
   development: true
   application:
     modules:
-      - moe.tabidachi.meeting.plugins.CORSKt.configureCORS
       - moe.tabidachi.meeting.plugins.DIKt.configureDI
+      - moe.tabidachi.meeting.plugins.SecurityKt.configureSecurity
+      - moe.tabidachi.meeting.plugins.CORSKt.configureCORS
       - moe.tabidachi.meeting.plugins.MonitoringKt.configureMonitoring
       - moe.tabidachi.meeting.plugins.RoutingKt.configureRouting
-      - moe.tabidachi.meeting.plugins.SecurityKt.configureSecurity
       - moe.tabidachi.meeting.plugins.SerializationKt.configureSerialization
       - moe.tabidachi.meeting.plugins.SocketsKt.configureSockets
       - moe.tabidachi.meeting.plugins.StatusPagesKt.configureStatusPages
