@@ -1,5 +1,6 @@
 package moe.tabidachi.meeting.ui.meeting.create
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,6 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,6 +54,7 @@ import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.ui.common.AppBar
 import moe.tabidachi.meeting.ui.common.Avatar
 import moe.tabidachi.meeting.ui.common.BottomButtons
+import moe.tabidachi.meeting.ui.common.LocalSnackbarHostState
 import moe.tabidachi.meeting.ui.common.ProvideContentColorTextStyle
 import moe.tabidachi.meeting.ui.preview.PreviewTheme
 import moe.tabidachi.meeting.ui.preview.Previews
@@ -62,6 +65,7 @@ fun CreateMeetingScreen(
     state: CreateMeetingContract.State,
     actions: CreateMeetingContract.Actions,
 ) {
+    val snackbarHostState = LocalSnackbarHostState.current
     Scaffold(
         topBar = {
             AppBar(
@@ -91,13 +95,19 @@ fun CreateMeetingScreen(
                     Text(text = stringResource(R.string.create_meeting_screen_schedule_button))
                 },
                 onNegativeClick = actions.onNavigateUp,
-                onPositiveClick = actions.onScheduleMeeting,
+                onPositiveClick = actions.onMeetingSchedule,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f))
                     .padding(16.dp)
                     .navigationBarsPadding()
             )
-        }, modifier = Modifier.imePadding()
+        },
+        snackbarHost = {
+            snackbarHostState?.let {
+                SnackbarHost(hostState = it)
+            }
+        },
+        modifier = Modifier.imePadding()
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -111,19 +121,22 @@ fun CreateMeetingScreen(
             }
             item {
                 LabelTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.name,
+                    onValueChange = actions.onNameChange,
                     label = {
                         Text(text = stringResource(R.string.create_meeting_screen_topic_label))
                     }, placeholder = {
                         Text(text = stringResource(R.string.create_meeting_screen_topic_placeholder))
+                    }, supportingText = when {
+                        state.nameErrorMessage == null -> null
+                        else -> errorMessage(state.nameErrorMessage)
                     }
                 )
             }
             item {
                 LabelTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.description,
+                    onValueChange = actions.onDescriptionChange,
                     label = {
                         Text(text = stringResource(R.string.create_meeting_screen_description_label))
                     }, placeholder = {
@@ -153,6 +166,12 @@ fun CreateMeetingScreen(
                 Spacer(modifier = Modifier.padding(bottom = it.calculateBottomPadding()))
             }
         }
+    }
+}
+
+fun errorMessage(@StringRes text: Int): @Composable () -> Unit {
+    return {
+        Text(text = stringResource(text), color = MaterialTheme.colorScheme.error)
     }
 }
 
@@ -471,7 +490,14 @@ fun DateTime(
         },
         headlineContent = {
             when (state.selectedDateTime) {
-                null -> Text(text = stringResource(R.string.create_meeting_screen_start_time_placeholder))
+                null -> when (state.dateTimeErrorMessage) {
+                    null -> Text(text = stringResource(R.string.create_meeting_screen_start_time_placeholder))
+                    else -> Text(
+                        text = stringResource(state.dateTimeErrorMessage),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
                 else -> Text(text = state.selectedDateTime.toString())
             }
         },
@@ -483,7 +509,14 @@ fun DateTime(
         },
         headlineContent = {
             when (state.selectedDuration) {
-                null -> Text(text = stringResource(R.string.create_meeting_screen_duration_placeholder))
+                null -> when (state.durationErrorMessage) {
+                    null -> Text(text = stringResource(R.string.create_meeting_screen_duration_placeholder))
+                    else -> Text(
+                        text = stringResource(state.durationErrorMessage),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
                 else -> Text(text = state.selectedDuration.toString())
             }
         },
@@ -535,6 +568,7 @@ fun LabelTextField(
     label: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     placeholder: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
     shape: Shape = RoundedCornerShape(16.dp),
 ) = Column(
     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -545,6 +579,7 @@ fun LabelTextField(
         value = value,
         onValueChange = onValueChange,
         placeholder = placeholder,
+        supportingText = supportingText,
         shape = shape,
         modifier = Modifier.fillMaxWidth()
     )

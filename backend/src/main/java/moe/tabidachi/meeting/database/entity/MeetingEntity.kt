@@ -18,5 +18,5 @@ class MeetingEntity(id: EntityID<Long>) : LongEntity(id) {
     var createdAt by MeetingTable.createdAt
     var updatedAt by MeetingTable.updatedAt
 
-    val participants by UserEntity via MeetingParticipantsTable
+    var participants by UserEntity via MeetingParticipantsTable
 }

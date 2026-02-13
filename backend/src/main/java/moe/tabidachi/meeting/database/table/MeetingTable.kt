@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.datetime.duration
 import org.jetbrains.exposed.v1.datetime.timestamp
 
-object MeetingTable : LongIdTable() {
+object MeetingTable : LongIdTable("meeting") {
     val name = text("name")
     val description = text("description").nullable()
     val time = timestamp("time")

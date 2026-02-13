@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_screen_tab_home">Home</string>
+    <string name="main_screen_tab_meetings">Meetings</string>
+    <string name="main_screen_tab_tasks">Tasks</string>
+    <string name="main_screen_tab_settings">Profile</string>
+</resources>

@@ -17,5 +17,5 @@ class UserEntity(uid: EntityID<Long>) : LongEntity(uid) {
     var createTime by UserTable.createTime
     var updateTime by UserTable.updateTime
 
-    val meeting by MeetingEntity via MeetingParticipantsTable
+    var meetings by MeetingEntity via MeetingParticipantsTable
 }

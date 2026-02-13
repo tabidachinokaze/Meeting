@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_screen_tab_home">首页</string>
+    <string name="main_screen_tab_meetings">会议</string>
+    <string name="main_screen_tab_tasks">任务</string>
+    <string name="main_screen_tab_settings">我的</string>
+</resources>

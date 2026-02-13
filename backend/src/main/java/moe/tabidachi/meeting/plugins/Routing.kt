@@ -7,6 +7,8 @@ import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import moe.tabidachi.meeting.config.JwtConfig
 import moe.tabidachi.meeting.routing.authenticate
+import moe.tabidachi.meeting.routing.contact
+import moe.tabidachi.meeting.routing.meeting
 import moe.tabidachi.meeting.routing.user
 
 fun Application.configureRouting() {
@@ -21,6 +23,8 @@ fun Application.configureRouting() {
         authenticate()
         authenticate(jwtConfig.name) {
             user()
+            contact()
+            meeting()
         }
     }
 }

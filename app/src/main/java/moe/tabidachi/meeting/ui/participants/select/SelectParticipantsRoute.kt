@@ -1,6 +1,7 @@
 package moe.tabidachi.meeting.ui.participants.select
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -18,6 +19,9 @@ fun SelectParticipantsRoute(
     viewModel: CreateMeetingViewModel
 ) {
     val (state, event) = viewModel.observe { }
+    LaunchedEffect(Unit) {
+        viewModel.event(CreateMeetingContract.Event.FetchContacts)
+    }
     SelectParticipantsScreen(
         state = state.value,
         actions = remember {

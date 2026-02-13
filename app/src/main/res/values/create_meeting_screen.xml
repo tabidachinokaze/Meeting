@@ -26,4 +26,8 @@
     <string name="create_meeting_screen_start_time_placeholder">Select date and time</string>
     <string name="create_meeting_screen_duration_label">Duration</string>
     <string name="create_meeting_screen_duration_placeholder">Select meeting duration</string>
+    <string name="create_meeting_screen_error_title_empty">Please enter a meeting title</string>
+    <string name="create_meeting_screen_error_date_empty">Please select a meeting date</string>
+    <string name="create_meeting_screen_error_duration_empty">Please select a meeting duration</string>
+    <string name="create_meeting_screen_error_create_failed_toast">Create failed</string>
 </resources>

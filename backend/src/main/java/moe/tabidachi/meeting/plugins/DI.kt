@@ -14,15 +14,19 @@ import moe.tabidachi.meeting.config.Argon2Config
 import moe.tabidachi.meeting.config.DatabaseConfig
 import moe.tabidachi.meeting.config.JwtConfig
 import moe.tabidachi.meeting.config.MinioConfig
+import moe.tabidachi.meeting.database.table.MeetingParticipantsTable
+import moe.tabidachi.meeting.database.table.MeetingTable
+import moe.tabidachi.meeting.database.table.UserRelationTable
 import moe.tabidachi.meeting.database.table.UserTable
-import moe.tabidachi.meeting.repository.UserRepository
-import moe.tabidachi.meeting.repository.UserRepositoryImpl
+import moe.tabidachi.meeting.repository.*
 import moe.tabidachi.meeting.security.Argon2Encryptor
 import moe.tabidachi.meeting.security.Encryptor
 import moe.tabidachi.meeting.security.Jwt
 import moe.tabidachi.meeting.security.JwtImpl
 import moe.tabidachi.meeting.service.AuthService
 import moe.tabidachi.meeting.service.AuthServiceImpl
+import moe.tabidachi.meeting.service.MeetingService
+import moe.tabidachi.meeting.service.MeetingServiceImpl
 import moe.tabidachi.meeting.service.UserService
 import moe.tabidachi.meeting.service.UserServiceImpl
 import org.jetbrains.exposed.v1.jdbc.Database
@@ -73,7 +77,7 @@ fun Application.configureDI() {
         provide<Database> {
             Database.connect(url, driver, user, password).also { db ->
                 transaction(db) {
-                    SchemaUtils.create(UserTable)
+                    SchemaUtils.create(UserTable, UserRelationTable, MeetingTable, MeetingParticipantsTable)
                 }
             }
         }
@@ -83,6 +87,16 @@ fun Application.configureDI() {
             UserRepositoryImpl(
                 database = resolve(),
                 encryptor = resolve()
+            )
+        }
+        provide<UserRelationRepository> {
+            UserRelationRepositoryImpl(
+                database = resolve()
+            )
+        }
+        provide<MeetingRepository> {
+            MeetingRepositoryImpl(
+                database = resolve()
             )
         }
     }
@@ -96,7 +110,13 @@ fun Application.configureDI() {
         }
         provide<UserService> {
             UserServiceImpl(
-                userRepository = resolve()
+                userRepository = resolve(),
+                userRelationRepository = resolve(),
+            )
+        }
+        provide<MeetingService> {
+            MeetingServiceImpl(
+                meetingRepository = resolve()
             )
         }
     }

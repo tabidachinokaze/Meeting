@@ -1,8 +1,10 @@
 package moe.tabidachi.meeting.model
 
+import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Instant
 
+@Serializable
 data class Meeting(
     val id: Long,
     val name: String,

@@ -26,4 +26,8 @@
     <string name="create_meeting_screen_start_time_placeholder">选择日期和时间</string>
     <string name="create_meeting_screen_duration_label">时长</string>
     <string name="create_meeting_screen_duration_placeholder">选择会议时长</string>
+    <string name="create_meeting_screen_error_title_empty">请输入会议标题</string>
+    <string name="create_meeting_screen_error_date_empty">请选择会议日期</string>
+    <string name="create_meeting_screen_error_duration_empty">请选择会议时长</string>
+    <string name="create_meeting_screen_error_create_failed_toast">创建失败</string>
 </resources>

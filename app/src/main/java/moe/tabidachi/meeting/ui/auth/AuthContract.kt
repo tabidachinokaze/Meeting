@@ -155,7 +155,7 @@ class AuthViewModel(
                         }
 
                         StatusCode.InternalError -> effect.emit(
-                            AuthContract.Effect.Toast(context.getString(R.string.auth_screen_error_server_internal))
+                            AuthContract.Effect.Toast(context.getString(R.string.error_server_internal))
                         )
 
                         StatusCode.LoginSuccess -> {
@@ -227,7 +227,7 @@ class AuthViewModel(
                         }
 
                         StatusCode.InternalError -> effect.emit(
-                            AuthContract.Effect.Toast(context.getString(R.string.auth_screen_error_server_internal))
+                            AuthContract.Effect.Toast(context.getString(R.string.error_server_internal))
                         )
 
                         StatusCode.SignUpSuccess -> {

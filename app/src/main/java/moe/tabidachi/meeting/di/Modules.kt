@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.data.SettingsDataStore
 import moe.tabidachi.meeting.data.api.AuthApi
+import moe.tabidachi.meeting.data.api.MeetingApi
 import moe.tabidachi.meeting.data.api.UserApi
 import moe.tabidachi.meeting.data.model.Settings
 import moe.tabidachi.meeting.ktx.dataStore
@@ -52,7 +53,11 @@ val routeModule = module {
             backStack
         }
         scoped {
-            CreateMeetingViewModel()
+            CreateMeetingViewModel(
+                context = get(),
+                userApi = get(),
+                meetingApi = get(),
+            )
         }
         viewModel {
             AuthViewModel(
@@ -177,6 +182,13 @@ val appModule = module {
         UserApi(
             client = get(),
             baseUrl = { dataStore.settings.value.baseUrl }
+        )
+    }
+    single<MeetingApi> {
+        val dataStore: SettingsDataStore = get()
+        MeetingApi(
+            client = get(),
+            baseUrl = { dataStore.settings.value.baseUrl },
         )
     }
 }

@@ -5,6 +5,11 @@ import moe.tabidachi.meeting.model.Meeting
 import moe.tabidachi.meeting.model.Response
 
 interface MeetingService {
-    fun getMeetings(uid: Long): Response<List<Meeting>>
-    fun createMeeting(request: CreateMeetingRequest): Response<Unit>
+    suspend fun getMeetings(uid: Long): Response<List<Meeting>>
+    suspend fun createMeeting(creatorId: Long, request: CreateMeetingRequest): Response<Meeting>
+}
+
+interface MeetingClientApi {
+    suspend fun getMeetings(): Response<List<Meeting>?>
+    suspend fun createMeeting(request: CreateMeetingRequest): Response<Meeting?>
 }
