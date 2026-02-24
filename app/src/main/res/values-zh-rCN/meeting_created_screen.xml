@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meeting_created_screen_title">会议创建成功</string>
+    <string name="meeting_created_screen_subtitle">会议邀请已发送给所有参会者</string>
+    <string name="meeting_created_screen_confirm_button">确定</string>
+    <string name="meeting_created_screen_add_to_calendar">添加到日历</string>
+    <string name="meeting_created_screen_tips_title">小贴士</string>
+    <string name="meeting_created_screen_tips_content">参会者将收到包含会议链接的邮件邀请。您也可以随时通过首页的会议列表查看和管理这个会议。</string>
+    <string name="meeting_created_screen_meeting_link_label">会议链接</string>
+    <string name="meeting_created_screen_copy_link_button">复制链接</string>
+    <string name="meeting_created_screen_share_button">分享</string>
+    <string name="meeting_created_screen_datetime_label">日期时间</string>
+    <string name="meeting_created_screen_duration_label">时长</string>
+</resources>

@@ -15,27 +15,29 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomButtons(
-    negativeContent: @Composable RowScope.() -> Unit,
     positiveContent: @Composable RowScope.() -> Unit,
-    onNegativeClick: () -> Unit,
     onPositiveClick: () -> Unit,
     modifier: Modifier = Modifier,
+    negativeContent: @Composable (RowScope.() -> Unit)? = null,
+    onNegativeClick: () -> Unit = {},
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(16.dp),
     modifier = modifier
 ) {
-    Button(
-        onClick = onNegativeClick, shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-        modifier = Modifier
-            .weight(1f)
-            .height(48.dp),
-        content = negativeContent
-    )
+    negativeContent?.let {
+        Button(
+            onClick = onNegativeClick, shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .height(48.dp),
+            content = it
+        )
+    }
     Button(
         onClick = onPositiveClick, shape = RoundedCornerShape(16.dp),
         modifier = Modifier

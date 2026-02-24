@@ -32,10 +32,14 @@ import moe.tabidachi.meeting.ui.main.MainViewModel
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingContract
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingRoute
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingViewModel
+import moe.tabidachi.meeting.ui.meeting.created.MeetingCreatedRoute
+import moe.tabidachi.meeting.ui.meeting.created.MeetingCreatedViewModel
 import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
 import org.koin.androidx.scope.dsl.activityRetainedScope
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
@@ -72,8 +76,10 @@ val routeModule = module {
         }
         scoped {
             MainViewModel(
+                context = get(),
                 userApi = get(),
-                dataStore = get()
+                dataStore = get(),
+                meetingApi = get()
             )
         }
         navigation<MainRoute> {
@@ -143,6 +149,17 @@ val routeModule = module {
                 visibleItemCount = 5
             )
         }
+        navigation<MeetingCreatedRoute> { route ->
+            MeetingCreatedRoute(
+                backStack = get(),
+                viewModel = koinViewModel { parametersOf(route) }
+            )
+        }
+    }
+    viewModel {
+        MeetingCreatedViewModel(
+            route = it.get(),
+        )
     }
 }
 

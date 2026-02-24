@@ -1,6 +1,10 @@
 package moe.tabidachi.meeting.ui.preview
 
+import moe.tabidachi.meeting.model.Meeting
+import moe.tabidachi.meeting.model.MeetingStatus
 import moe.tabidachi.meeting.model.UserInfo
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
 
 val userInfoList = listOf(
     UserInfo(
@@ -43,4 +47,31 @@ val userInfoList = listOf(
         username = "Jennifer Lee",
         email = "jennifer.l@company.com",
     ),
+)
+
+val meetings = listOf(
+    Meeting(
+        id = 1,
+        name = "Product Strategy Review",
+        time = Clock.System.now(),
+        duration = 45.minutes,
+        participants = listOf(1, 2, 3),
+        status = MeetingStatus.Upcoming,
+        description = "",
+        creatorId = 1,
+        createdAt = Clock.System.now(),
+        updatedAt = Clock.System.now()
+    ),
+    Meeting(
+        id = 1,
+        name = "Design Sprint Planning",
+        time = Clock.System.now(),
+        duration = 60.minutes,
+        participants = listOf(4, 5),
+        status = MeetingStatus.Upcoming,
+        description = "",
+        creatorId = 4,
+        createdAt = Clock.System.now(),
+        updatedAt = Clock.System.now()
+    )
 )

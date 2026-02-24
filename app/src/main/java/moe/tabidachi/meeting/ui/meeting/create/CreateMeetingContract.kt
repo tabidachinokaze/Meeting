@@ -24,6 +24,7 @@ import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.data.api.MeetingApi
 import moe.tabidachi.meeting.data.api.UserApi
 import moe.tabidachi.meeting.model.CreateMeetingRequest
+import moe.tabidachi.meeting.model.Meeting
 import moe.tabidachi.meeting.model.StatusCode
 import moe.tabidachi.meeting.model.UserInfo
 import moe.tabidachi.meeting.model.statusCode
@@ -94,7 +95,7 @@ interface CreateMeetingContract {
     }
 
     sealed interface Effect {
-        data object OnMeetingCreated : Effect
+        data class OnMeetingCreated(val meeting: Meeting) : Effect
         data class Toast(val text: String) : Effect
     }
 }
@@ -217,7 +218,9 @@ class CreateMeetingViewModel(
             )
             when (response.statusCode) {
                 StatusCode.Success -> {
-                    effect.emit(CreateMeetingContract.Effect.OnMeetingCreated)
+                    response.data?.let { meeting ->
+                        effect.emit(CreateMeetingContract.Effect.OnMeetingCreated(meeting))
+                    }
                 }
 
                 StatusCode.InternalError -> effect.emit(

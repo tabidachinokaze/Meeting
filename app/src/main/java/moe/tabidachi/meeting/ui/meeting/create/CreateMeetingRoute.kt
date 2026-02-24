@@ -13,6 +13,7 @@ import moe.tabidachi.compose.mvi.observe
 import moe.tabidachi.meeting.di.DateTimePickerDialog
 import moe.tabidachi.meeting.di.DurationPickerDialog
 import moe.tabidachi.meeting.ui.common.LocalSnackbarHostState
+import moe.tabidachi.meeting.ui.meeting.created.MeetingCreatedRoute
 import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
 
 @Serializable
@@ -27,9 +28,11 @@ fun CreateMeetingRoute(
     val scope = rememberCoroutineScope()
     val (state, event) = viewModel.observe {
         when (it) {
-            CreateMeetingContract.Effect.OnMeetingCreated -> {
-                scope.launch { snackbarHostState.showSnackbar("创建成功") }
+            is CreateMeetingContract.Effect.OnMeetingCreated -> {
+                backStack.remove(CreateMeetingRoute)
+                backStack.add(MeetingCreatedRoute(it.meeting))
             }
+
             is CreateMeetingContract.Effect.Toast -> {
                 scope.launch { snackbarHostState.showSnackbar(it.text) }
             }

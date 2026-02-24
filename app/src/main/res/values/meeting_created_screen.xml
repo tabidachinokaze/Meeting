@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meeting_created_screen_title">Meeting Created Successfully</string>
+    <string name="meeting_created_screen_subtitle">Meeting invitations have been sent to all participants</string>
+    <string name="meeting_created_screen_confirm_button">Confirm</string>
+    <string name="meeting_created_screen_add_to_calendar">Add to Calendar</string>
+    <string name="meeting_created_screen_tips_title">Tips</string>
+    <string name="meeting_created_screen_tips_content">Participants will receive an email invitation with the meeting link. You can also view and manage this meeting anytime from the meeting list on the home page.</string>
+    <string name="meeting_created_screen_meeting_link_label">Meeting Link</string>
+    <string name="meeting_created_screen_copy_link_button">Copy Link</string>
+    <string name="meeting_created_screen_share_button">Share</string>
+    <string name="meeting_created_screen_datetime_label">Date &amp; Time</string>
+    <string name="meeting_created_screen_duration_label">Duration</string>
+</resources>

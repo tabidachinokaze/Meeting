@@ -1,15 +1,22 @@
 package moe.tabidachi.meeting.ui.main
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import moe.tabidachi.compose.mvi.BackingFieldsViewModel
+import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.data.SettingsDataStore
+import moe.tabidachi.meeting.data.api.MeetingApi
 import moe.tabidachi.meeting.data.api.UserApi
 import moe.tabidachi.meeting.domain.model.MeetingItem
 import moe.tabidachi.meeting.ktx.TAG
@@ -119,24 +126,77 @@ interface MainContract {
 }
 
 class MainViewModel(
+    private val context: Context,
     private val userApi: UserApi,
-    private val dataStore: SettingsDataStore
+    private val dataStore: SettingsDataStore,
+    private val meetingApi: MeetingApi
 ) : MainContract.ViewModel() {
     final override val state: StateFlow<MainContract.State>
-        field = MutableStateFlow(
-            MainContract.State.Preview
-        )
+        field = MutableStateFlow(MainContract.State())
 
     final override val effect: SharedFlow<MainContract.Effect>
         field = MutableSharedFlow()
 
     init {
         fetchUserInfo()
+        fetchMeetings()
+        state.map { it.userInfo }.distinctUntilChanged().onEach { userInfo ->
+            if (userInfo == null) {
+                state.update { it.copy(greeting = "") }
+            } else {
+                state.update {
+                    it.copy(
+                        greeting = context.getString(
+                            R.string.home_page_greeting_format,
+                            userInfo.username
+                        )
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun event(event: MainContract.Event) = when (event) {
         is MainContract.Event.OnTabClick -> state.update { it.copy(currentTab = event.page) }
         MainContract.Event.OnLogout -> dataStore.logout()
+    }
+
+    private fun fetchMeetings() {
+        viewModelScope.launch {
+            runCatching {
+                val response = meetingApi.getMeetings()
+                when (response.statusCode) {
+                    StatusCode.Success -> {
+                        response.data?.let { meetings ->
+                            state.update {
+                                it.copy(
+                                    meetings = meetings.map {
+                                        MeetingItem(
+                                            id = it.id,
+                                            name = it.name,
+                                            time = it.time,
+                                            duration = it.duration,
+                                            participants = it.participants.mapNotNull {
+                                                userApi.getUserInfo(it).data
+                                            },
+                                            status = it.status,
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    StatusCode.InternalError -> {
+
+                    }
+
+                    else -> Unit
+                }
+            }.onFailure {
+                it.printStackTrace()
+            }
+        }
     }
 
     private fun fetchUserInfo() {

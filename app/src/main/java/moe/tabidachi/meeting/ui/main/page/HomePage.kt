@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -82,17 +84,28 @@ fun HomePage(
             Text(text = stringResource(R.string.home_page_view_all))
         }
     }
-    state.meetings.forEach {
-        MeetingCard(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            title = it.name,
-            time = autoTimeString(it.time),
-            duration = it.duration.toString(),
-            participants = it.participants.joinToString(", ") { it.username },
-            onJoin = {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(Space),
+        modifier = Modifier.weight(1f)
+    ) {
+        items(
+            items = state.meetings,
+            key = { it.id }
+        ) {
+            MeetingCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = it.name,
+                time = autoTimeString(it.time),
+                duration = it.duration.toString(),
+                participants = it.participants.joinToString(", ") { it.username },
+                onJoin = {
 
-            }
-        )
+                }
+            )
+        }
+        item {
+            Spacer(modifier = Modifier)
+        }
     }
 }
 
