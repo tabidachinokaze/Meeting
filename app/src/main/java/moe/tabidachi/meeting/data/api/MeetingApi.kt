@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.tabidachi.meeting.model.CreateMeetingRequest
+import moe.tabidachi.meeting.model.DirectMeeting
 import moe.tabidachi.meeting.model.Meeting
 import moe.tabidachi.meeting.model.Response
 import moe.tabidachi.meeting.service.MeetingClientApi
@@ -36,4 +37,8 @@ class MeetingApi(
                 setBody(request)
             }.body()
         }
+
+    override suspend fun getDirectMeeting(meetingId: Long): Response<DirectMeeting> {
+        TODO("Not yet implemented")
+    }
 }

@@ -17,4 +17,11 @@ class MeetingServiceImpl(
         )
         return StatusCode.Success.withData(meeting)
     }
+
+    override suspend fun getDirectMeeting(
+        uid: Long,
+        meetingId: Long
+    ): Response<DirectMeeting> {
+
+    }
 }

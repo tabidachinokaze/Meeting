@@ -1,6 +1,6 @@
 package moe.tabidachi.meeting.routing
 
-import io.ktor.server.application.log
+import io.ktor.http.*
 import io.ktor.server.plugins.di.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -22,7 +22,13 @@ fun Route.meeting() {
             creatorId = creatorId,
             request = request
         )
-        println(response)
+        call.respond(response)
+    }
+    post("/direct") {
+        val meetingId =
+            call.queryParameters["meetingId"]?.toLongOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+        val userId = requireUserId()
+        val response = meetingService.getDirectMeeting(userId, meetingId)
         call.respond(response)
     }
 }
