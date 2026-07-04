@@ -120,6 +120,7 @@ interface MainContract {
     sealed interface Event {
         data class OnTabClick(val page: MainTab) : Event
         data object OnLogout : Event
+        data object OnFetchMeetings : Event
     }
 
     sealed interface Effect
@@ -139,7 +140,6 @@ class MainViewModel(
 
     init {
         fetchUserInfo()
-        fetchMeetings()
         state.map { it.userInfo }.distinctUntilChanged().onEach { userInfo ->
             if (userInfo == null) {
                 state.update { it.copy(greeting = "") }
@@ -159,6 +159,7 @@ class MainViewModel(
     override fun event(event: MainContract.Event) = when (event) {
         is MainContract.Event.OnTabClick -> state.update { it.copy(currentTab = event.page) }
         MainContract.Event.OnLogout -> dataStore.logout()
+        MainContract.Event.OnFetchMeetings -> fetchMeetings()
     }
 
     private fun fetchMeetings() {

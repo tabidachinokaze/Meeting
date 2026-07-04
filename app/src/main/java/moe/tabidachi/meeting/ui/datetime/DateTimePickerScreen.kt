@@ -52,7 +52,7 @@ fun DateTimePickerScreen(
 ) = BasicAlertDialog(
     onDismissRequest = onNavigateUp,
     properties = DialogProperties(usePlatformDefaultWidth = false),
-    modifier = Modifier.padding(horizontal = 16.dp)
+    modifier = Modifier
 ) {
     var dateTime by remember { mutableStateOf(DateTime.DATE) }
     val datePickerState = rememberDatePickerState(

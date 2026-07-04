@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
 import com.auth0.android.jwt.JWT
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import moe.tabidachi.compose.mvi.BackingFieldsViewModel
 import moe.tabidachi.meeting.R
 import moe.tabidachi.meeting.data.SettingsDataStore
@@ -25,8 +24,8 @@ import moe.tabidachi.meeting.model.StatusCode
 import moe.tabidachi.meeting.model.statusCode
 import moe.tabidachi.meeting.regex.RegexEmail
 import moe.tabidachi.meeting.regex.RegexUsernameStrict
-import moe.tabidachi.meeting.ui.main.MainRoute
 import moe.tabidachi.meeting.utils.Debounce
+import java.net.ConnectException
 import java.nio.channels.UnresolvedAddressException
 
 interface AuthContract {
@@ -71,6 +70,7 @@ interface AuthContract {
 
     sealed interface Effect {
         data class Toast(val text: String) : Effect
+        data object NavigateToMainScreen : Effect
     }
 }
 
@@ -86,7 +86,6 @@ class AuthViewModel(
     private val context: Context,
     private val authApi: AuthApi,
     private val dataStore: SettingsDataStore,
-    private val backStack: NavBackStack<NavKey>
 ) : AuthContract.ViewModel() {
     final override val state: StateFlow<AuthContract.State>
         field = MutableStateFlow(AuthContract.State())
@@ -168,12 +167,13 @@ class AuthViewModel(
                     }
                 }.onFailure {
                     when (it) {
-                        is UnresolvedAddressException -> {
-                            effect.emit(AuthContract.Effect.Toast(context.getString(R.string.error_network_address)))
-                        }
-
                         is ConnectTimeoutException -> {
                             effect.emit(AuthContract.Effect.Toast(context.getString(R.string.error_connect_timeout)))
+                        }
+
+                        is ConnectException,
+                        is UnresolvedAddressException -> {
+                            effect.emit(AuthContract.Effect.Toast(context.getString(R.string.error_network_address)))
                         }
                     }
                     Log.e(TAG, "onLogin: ", it)
@@ -262,7 +262,6 @@ class AuthViewModel(
     }
 
     private fun onAuthSuccess() {
-        backStack.clear()
-        backStack.add(MainRoute)
+        viewModelScope.launch { effect.emit(AuthContract.Effect.NavigateToMainScreen) }
     }
 }

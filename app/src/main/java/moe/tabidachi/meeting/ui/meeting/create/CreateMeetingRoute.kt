@@ -10,28 +10,40 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
-import moe.tabidachi.meeting.di.DateTimePickerDialog
-import moe.tabidachi.meeting.di.DurationPickerDialog
+import moe.tabidachi.meeting.model.Meeting
 import moe.tabidachi.meeting.ui.common.LocalSnackbarHostState
-import moe.tabidachi.meeting.ui.meeting.created.MeetingCreatedRoute
-import moe.tabidachi.meeting.ui.participants.select.SelectParticipantsRoute
+
 
 @Serializable
-data object CreateMeetingRoute : NavKey
+sealed interface CreateMeetingKey : NavKey {
+    @Serializable
+    data object CreateMeetingNavDisplay : CreateMeetingKey
+
+    @Serializable
+    data object CreateMeetingRoute : CreateMeetingKey
+
+    @Serializable
+    data object SelectParticipantsRoute : CreateMeetingKey
+
+    @Serializable
+    data object PickDateTimeRoute : CreateMeetingKey
+
+    @Serializable
+    data object PickDurationRoute : CreateMeetingKey
+}
 
 @Composable
 fun CreateMeetingRoute(
     backStack: NavBackStack<NavKey>,
-    viewModel: CreateMeetingViewModel
+    viewModel: CreateMeetingViewModel,
+    onMeetingCreated: (Meeting) -> Unit,
+    onNavigateUp: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (state, event) = viewModel.observe {
         when (it) {
-            is CreateMeetingContract.Effect.OnMeetingCreated -> {
-                backStack.remove(CreateMeetingRoute)
-                backStack.add(MeetingCreatedRoute(it.meeting))
-            }
+            is CreateMeetingContract.Effect.OnMeetingCreated -> onMeetingCreated(it.meeting)
 
             is CreateMeetingContract.Effect.Toast -> {
                 scope.launch { snackbarHostState.showSnackbar(it.text) }
@@ -43,35 +55,31 @@ fun CreateMeetingRoute(
     ) {
         CreateMeetingScreen(
             state = state.value,
-            actions = remember {
-                CreateMeetingContract.Actions(
-                    onNavigateUp = {
-                        backStack.removeLastOrNull()
-                    },
-                    onNavigateToSelectParticipants = {
-                        event(CreateMeetingContract.Event.OnParticipantsSelectStart)
-                        backStack.add(SelectParticipantsRoute)
-                    },
-                    onDateTimePick = {
-                        backStack.add(DateTimePickerDialog)
-                    },
-                    onDurationPick = {
-                        backStack.add(DurationPickerDialog)
-                    },
-                    onSelectedParticipantAddOrRemove = {
-                        event(CreateMeetingContract.Event.OnSelectedParticipantAddOrRemove(it))
-                    },
-                    onNameChange = {
-                        event(CreateMeetingContract.Event.OnNameChange(it))
-                    },
-                    onDescriptionChange = {
-                        event(CreateMeetingContract.Event.OnDescriptionChange(it))
-                    },
-                    onMeetingSchedule = {
-                        event(CreateMeetingContract.Event.OnMeetingSchedule)
-                    }
-                )
-            }
+            actions = CreateMeetingContract.Actions(
+                onNavigateUp = onNavigateUp,
+                onNavigateToSelectParticipants = {
+                    event(CreateMeetingContract.Event.OnParticipantsSelectStart)
+                    backStack.add(CreateMeetingKey.SelectParticipantsRoute)
+                },
+                onDateTimePick = {
+                    backStack.add(CreateMeetingKey.PickDateTimeRoute)
+                },
+                onDurationPick = {
+                    backStack.add(CreateMeetingKey.PickDurationRoute)
+                },
+                onSelectedParticipantAddOrRemove = {
+                    event(CreateMeetingContract.Event.OnSelectedParticipantAddOrRemove(it))
+                },
+                onNameChange = {
+                    event(CreateMeetingContract.Event.OnNameChange(it))
+                },
+                onDescriptionChange = {
+                    event(CreateMeetingContract.Event.OnDescriptionChange(it))
+                },
+                onMeetingSchedule = {
+                    event(CreateMeetingContract.Event.OnMeetingSchedule)
+                }
+            )
         )
     }
 }

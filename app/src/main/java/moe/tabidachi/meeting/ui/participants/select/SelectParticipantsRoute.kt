@@ -2,16 +2,11 @@ package moe.tabidachi.meeting.ui.participants.select
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import kotlinx.serialization.Serializable
 import moe.tabidachi.compose.mvi.observe
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingContract
 import moe.tabidachi.meeting.ui.meeting.create.CreateMeetingViewModel
-
-@Serializable
-data object SelectParticipantsRoute : NavKey
 
 @Composable
 fun SelectParticipantsRoute(
@@ -24,26 +19,24 @@ fun SelectParticipantsRoute(
     }
     SelectParticipantsScreen(
         state = state.value,
-        actions = remember {
-            CreateMeetingContract.Actions(
-                onNavigateUp = {
-                    backStack.removeLastOrNull()
-                },
-                onParticipantAddOrRemove = {
-                    event(CreateMeetingContract.Event.OnParticipantAddOrRemove(it))
-                },
-                onParticipantsSelectCancel = {
-                    backStack.removeLastOrNull()
-                    event(CreateMeetingContract.Event.OnParticipantsSelectCancel)
-                },
-                onParticipantsSelectConfirm = {
-                    backStack.removeLastOrNull()
-                    event(CreateMeetingContract.Event.OnParticipantsSelectConfirm)
-                },
-                onContactQueryChange = {
-                    event(CreateMeetingContract.Event.OnContactQueryChange(it))
-                }
-            )
-        }
+        actions = CreateMeetingContract.Actions(
+            onNavigateUp = {
+                backStack.removeLastOrNull()
+            },
+            onParticipantAddOrRemove = {
+                event(CreateMeetingContract.Event.OnParticipantAddOrRemove(it))
+            },
+            onParticipantsSelectCancel = {
+                backStack.removeLastOrNull()
+                event(CreateMeetingContract.Event.OnParticipantsSelectCancel)
+            },
+            onParticipantsSelectConfirm = {
+                backStack.removeLastOrNull()
+                event(CreateMeetingContract.Event.OnParticipantsSelectConfirm)
+            },
+            onContactQueryChange = {
+                event(CreateMeetingContract.Event.OnContactQueryChange(it))
+            }
+        )
     )
 }

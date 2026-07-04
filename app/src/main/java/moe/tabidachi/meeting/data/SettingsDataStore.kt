@@ -1,11 +1,11 @@
 package moe.tabidachi.meeting.data
 
 import androidx.datastore.core.DataStore
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import moe.tabidachi.meeting.BuildConfig
 import moe.tabidachi.meeting.data.model.Settings
-import moe.tabidachi.meeting.ui.auth.AuthRoute
 
 class SettingsDataStore(
     private val dataStore: DataStore<Settings>,
@@ -25,8 +24,7 @@ class SettingsDataStore(
         started = SharingStarted.Eagerly,
         initialValue = runBlocking { dataStore.data.first() }
     )
-
-    private var backStack: NavBackStack<NavKey> = NavBackStack()
+    val effect: SharedFlow<SettingsEffect> field = MutableSharedFlow()
 
     init {
         if (settings.value.baseUrl.isBlank()) {
@@ -55,12 +53,11 @@ class SettingsDataStore(
             update { settings ->
                 settings.copy(tokens = settings.tokens.filter { it.key != settings.uid })
             }
-            backStack.clear()
-            backStack.add(AuthRoute)
+            effect.emit(SettingsEffect.NavigateToAuthScreen(true))
         }
     }
+}
 
-    fun setBackStack(backStack: NavBackStack<NavKey>) {
-        this.backStack = backStack
-    }
+sealed interface SettingsEffect {
+    data class NavigateToAuthScreen(val clearBackStack: Boolean) : SettingsEffect
 }

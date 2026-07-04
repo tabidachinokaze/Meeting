@@ -4,13 +4,14 @@ import android.app.Application
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
+import coil3.annotation.ExperimentalCoilApi
 import coil3.gif.AnimatedImageDecoder
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.svg.SvgDecoder
 import coil3.video.VideoFrameDecoder
 import io.ktor.client.HttpClient
-import moe.tabidachi.meeting.di.appModule
-import moe.tabidachi.meeting.di.routeModule
+import moe.tabidachi.meeting.di.sharedModule
+import moe.tabidachi.meeting.di.viewModelModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -27,9 +28,10 @@ class Meeting : Application(), KoinStartup, SingletonImageLoader.Factory {
     override fun onKoinStartup(): KoinConfiguration = koinConfiguration {
         androidLogger(level = Level.DEBUG)
         androidContext(this@Meeting)
-        modules(routeModule, appModule)
+        modules(sharedModule, viewModelModule)
     }
 
+    @OptIn(ExperimentalCoilApi::class)
     override fun newImageLoader(context: PlatformContext): ImageLoader {
         return ImageLoader.Builder(this)
             .components {

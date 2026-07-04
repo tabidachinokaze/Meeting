@@ -1,7 +1,6 @@
 package moe.tabidachi.meeting.ui.meeting.created
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
@@ -22,12 +21,10 @@ fun MeetingCreatedRoute(
 
     MeetingCreatedScreen(
         state = state.value,
-        actions = remember {
-            MeetingCreatedContract.Actions(
-                onNavigateUp = {
-                    backStack.removeLastOrNull()
-                }
-            )
-        }
+        actions = MeetingCreatedContract.Actions(
+            onNavigateUp = {
+                backStack.removeLastOrNull()
+            }
+        )
     )
 }
